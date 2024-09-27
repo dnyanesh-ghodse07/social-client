@@ -8,13 +8,14 @@ import {
 } from "../features/posts/postsSlice";
 import { Link } from "react-router-dom";
 import { Post } from "../type";
+import Loader from "../components/Loader";
 
 const UserHome = () => {
   const [text, setText] = useState("");
   const { data: posts, isLoading, isError } = useGetAllPostsQuery({});
   const [createPost, { isLoading: createPostLoading }] =
     useCreatePostMutation();
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <Loader/>;
   if (isError) return <p>Something went wrong..</p>;
 
   const handleSubmit = async () => {

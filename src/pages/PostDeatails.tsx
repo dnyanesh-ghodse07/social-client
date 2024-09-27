@@ -1,20 +1,28 @@
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useCommentOnPostMutation,
+  useDislikePostMutation,
   useGetPostCommentsQuery,
   useGetPostQuery,
+  useLikePostMutation,
 } from "../features/posts/postsSlice";
+import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
 import dateFormat from "dateformat";
 import { BsPerson } from "react-icons/bs";
 import { BiLeftArrow, BiUpArrowAlt } from "react-icons/bi";
 import { useState } from "react";
 import { Comment } from "../type";
+import Loader from "../components/Loader";
 
 const PostDeatails = () => {
   const [commentQuery, setCommentQuery] = useState("");
   const navigate = useNavigate();
   const { postId } = useParams();
-  const { data: post } = useGetPostQuery(postId);
+
+  const [likePost, { isLoading: likeLoading }] = useLikePostMutation();
+  const [dislikePost, { isLoading: dislikeLoading }] = useDislikePostMutation();
+
+  const { data: post,isLoading: postLoading } = useGetPostQuery(postId);
   const {
     data: comments,
     isLoading,
@@ -32,14 +40,27 @@ const PostDeatails = () => {
     setCommentQuery("");
     refetch();
   };
+
+  const handleLikeDislike = async () => {
+    if (post?.userHasLiked) {
+      await dislikePost(postId);
+    } else {
+      await likePost(postId);
+    }
+  };
   return (
     <div className="p-4">
-      <button className="mb-4 text-slate-500 border-2 px-1 flex items-center" onClick={() => navigate(-1)}>
+      <button
+        className="mb-4 text-slate-500 border-2 px-1 flex items-center"
+        onClick={() => navigate(-1)}
+      >
         {" "}
         <BiLeftArrow />
         Back
       </button>
-      <div>
+      {postLoading ? <div className="w-full h-56 flex justify-center items-center">
+            <Loader/>
+          </div> : <div>
         <div className="flex justify-between">
           <h2 className="text-slate-600">@{post?.post?.user_id?.username}</h2>
           <span className="text-slate-400">
@@ -47,10 +68,19 @@ const PostDeatails = () => {
           </span>
         </div>
         <p className="my-2">{post?.post?.text}</p>
-        <div>
-          <button className="font-bold">Likes {post?.likes_count}</button>
+        <div className="flex gap-1">
+          {post?.userHasLiked ? (
+            <button onClick={handleLikeDislike} disabled={dislikeLoading}>
+              <IoMdHeart size={24}/>
+            </button>
+          ) : (
+            <button onClick={handleLikeDislike} disabled={likeLoading}>
+              <IoMdHeartEmpty size={24}/>
+            </button>
+          )}
+          <span>{post?.likes_count}</span>
         </div>
-      </div>
+      </div>}
       <div className="flex items-center my-4 gap-2 w-full">
         <input
           value={commentQuery}
@@ -69,10 +99,12 @@ const PostDeatails = () => {
         )}
       </div>
       <div>
-        <h2>Commnets</h2>
+        <h2>Commnets ({comments?.length})</h2>
         {isError && <p>{"Something went wrong"}</p>}
         {isLoading ? (
-          <p>Loading...</p>
+          <div className="w-full h-full flex justify-center items-center">
+            <Loader/>
+          </div>
         ) : (
           <div className="flex flex-col gap-2 mt-4">
             {comments?.map((comment: Comment) => {
