@@ -8,7 +8,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
     }),
     getPost: builder.query({
       query: (id) => `/posts/${id}`,
-      providesTags: (result, error, id) => [{ type: "Post", id }],
+      providesTags: (_result, _error, id) => [{ type: "Post", id }],
     }),
     getUserPost: builder.query({
       query: (userId) => `posts/${userId}`
@@ -26,14 +26,14 @@ export const postsApiSlice = apiSlice.injectEndpoints({
         url: `/posts/${id}/like`,
         method: "POST",
       }),
-      invalidatesTags: (result, error, id) => [{ type: "Post", id }],
+      invalidatesTags: (_result, _error, id) => [{ type: "Post", id }],
     }),
     dislikePost: builder.mutation({
       query: (id) => ({
         url: `/posts/${id}/dislike`,
         method: "POST",
       }),
-      invalidatesTags: (result, error, id) => [{ type: "Post", id }],
+      invalidatesTags: (_result, _error, id) => [{ type: "Post", id }],
     }),
     commentOnPost: builder.mutation({
       query: ({ id, commentData }) => {
@@ -44,7 +44,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
           body: commentData,
         }
       },
-      invalidatesTags: (result, error, id) => [{ type: "Post", id }],
+      invalidatesTags: (_result, _error, id) => [{ type: "Post", id }],
     }),
     getPostComments: builder.query({
       query: ({postId}) => `posts/${postId}/comment`

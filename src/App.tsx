@@ -1,15 +1,15 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import UserHome from "./pages/UserHome";
-import CreatePost from "./pages/CreatePost";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PostDeatails from "./pages/PostDeatails";
 import Navbar from "./components/Navbar";
 import Register from "./pages/Register";
 import { useSelector } from "react-redux";
+import { RootState } from "./app/store";
 
 function App() {
-  const isLogin = useSelector(state => state?.auth?.isAuthenticated);
+  const isLogin = useSelector((state: RootState) => state?.auth?.isAuthenticated);
   return (
     <>
       <Router>
@@ -25,14 +25,6 @@ function App() {
               element={
                 <ProtectedRoute>
                   <UserHome />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/create-post"
-              element={
-                <ProtectedRoute>
-                  <CreatePost />
                 </ProtectedRoute>
               }
             />

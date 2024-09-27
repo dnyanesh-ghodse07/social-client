@@ -3,17 +3,19 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../features/auth/authAction";
 import { Link } from "react-router-dom";
+import { AppDispatch } from "../app/store";
+import { Credentials } from "../type";
 
 const Register = () => {
-  const [credentials, setCredentials] = useState({
+  const [credentials, setCredentials] = useState<Credentials>({
     username: "",
     email: "",
     password: "",
   });
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const result = await dispatch(registerUser(credentials));
     if (result.meta.requestStatus === "fulfilled") {

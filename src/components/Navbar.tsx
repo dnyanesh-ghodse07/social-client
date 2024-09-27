@@ -2,10 +2,11 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { logoutUser } from "../features/auth/authAction";
 import { useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "../app/store";
 
 const Navbar = () => {
-  const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state) => state?.auth?.isAuthenticated);
+  const dispatch = useDispatch<AppDispatch>();
+  const isAuthenticated = useSelector((state: RootState) => state?.auth?.isAuthenticated);
 
   const handleLogout = () => {
     dispatch(logoutUser());

@@ -8,6 +8,7 @@ import dateFormat from "dateformat";
 import { BsPerson } from "react-icons/bs";
 import { BiLeftArrow, BiUpArrowAlt } from "react-icons/bi";
 import { useState } from "react";
+import { Comment } from "../type";
 
 const PostDeatails = () => {
   const [commentQuery, setCommentQuery] = useState("");
@@ -18,7 +19,6 @@ const PostDeatails = () => {
     data: comments,
     isLoading,
     isError,
-    error,
     refetch,
   } = useGetPostCommentsQuery({ postId });
 
@@ -70,12 +70,12 @@ const PostDeatails = () => {
       </div>
       <div>
         <h2>Commnets</h2>
-        {isError && <p>{error?.message}</p>}
+        {isError && <p>{"Something went wrong"}</p>}
         {isLoading ? (
           <p>Loading...</p>
         ) : (
           <div className="flex flex-col gap-2 mt-4">
-            {comments?.map((comment) => {
+            {comments?.map((comment: Comment) => {
               return (
                 <div key={comment._id} className="">
                   <div className="flex items-center gap-1">

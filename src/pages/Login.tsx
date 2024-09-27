@@ -3,13 +3,18 @@ import { useDispatch } from "react-redux";
 import { loginUser } from "../features/auth/authAction";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { Credentials } from "../type";
+import { AppDispatch } from "../app/store";
 
 const Login = () => {
-  const [credentials, setCredentials] = useState({ email: "", password: "" });
-  const dispatch = useDispatch();
+  const [credentials, setCredentials] = useState<Credentials>({
+    email: "",
+    password: "",
+  });
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const result = await dispatch(loginUser(credentials));
     if (result.meta.requestStatus === "fulfilled") {
@@ -19,8 +24,11 @@ const Login = () => {
 
   return (
     <div className="flex justify-center items-center h-[calc(100vh-100px)]">
-      <form onSubmit={handleLogin} className="flex flex-col gap-4 pb-8 pt-4 px-6 shadow-md">
-      <h2 className="text-2xl">Login</h2>
+      <form
+        onSubmit={handleLogin}
+        className="flex flex-col gap-4 pb-8 pt-4 px-6 shadow-md"
+      >
+        <h2 className="text-2xl">Login</h2>
         <input
           type="email"
           placeholder="Email"
@@ -39,10 +47,17 @@ const Login = () => {
             setCredentials({ ...credentials, password: e.target.value })
           }
         />
-        <button className="p-2 mt-1 mb-2 bg-cyan-800 text-slate-100" type="submit">Login</button>
+        <button
+          className="p-2 mt-1 mb-2 bg-cyan-800 text-slate-100"
+          type="submit"
+        >
+          Login
+        </button>
         <p className="text-sm">
-        Don't have an account ? 
-        <Link className="text-blue-800 text-sm pl-1" to='/register'>Register</Link>
+          Don't have an account ?
+          <Link className="text-blue-800 text-sm pl-1" to="/register">
+            Register
+          </Link>
         </p>
       </form>
     </div>
