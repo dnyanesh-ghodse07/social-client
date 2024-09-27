@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:9000/api",
+  baseURL: "https://stoked-keyword-436905-f9.el.r.appspot.com/api",
 });
 
 // Add a request interceptor to attach the token to every request
