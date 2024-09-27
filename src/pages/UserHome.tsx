@@ -7,14 +7,15 @@ import {
   useGetAllPostsQuery,
 } from "../features/posts/postsSlice";
 import { Link } from "react-router-dom";
+import { Post } from "../type";
 
 const UserHome = () => {
   const [text, setText] = useState("");
-  const { data: posts, isLoading, isError, error } = useGetAllPostsQuery({});
+  const { data: posts, isLoading, isError } = useGetAllPostsQuery({});
   const [createPost, { isLoading: createPostLoading }] =
     useCreatePostMutation();
   if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error: {error?.message}</p>;
+  if (isError) return <p>Something went wrong..</p>;
 
   const handleSubmit = async () => {
     if (!text) return;
@@ -48,7 +49,7 @@ const UserHome = () => {
         </div>
       </div>
       <div className="flex flex-wrap gap-4">
-        {posts?.posts?.map((post) => (
+        {posts?.posts?.map((post: Post) => (
             <div key={post._id} className="min-w-56 flex-1 p-2 shadow-md">
               <Link to={`/post/${post._id}`} >
                 <p className="text-slate-400 flex items-center pb-1">

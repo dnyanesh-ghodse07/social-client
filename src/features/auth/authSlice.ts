@@ -1,7 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { loginUser, logoutUser } from './authAction';
 
-const initialState = {
+interface InitializeState{
+  user: unknown | null,
+  token: string | null,
+  isAuthenticated: boolean
+}
+
+const initialState:InitializeState = {
   user: null,
   token: localStorage.getItem('token') || null, // Initialize from localStorage
   isAuthenticated: !!localStorage.getItem('token')
