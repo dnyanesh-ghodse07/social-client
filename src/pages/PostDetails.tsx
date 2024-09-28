@@ -1,26 +1,23 @@
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useCommentOnPostMutation,
-  useDislikePostMutation,
   useGetPostCommentsQuery,
   useGetPostQuery,
-  useLikePostMutation,
 } from "../features/posts/postsSlice";
-import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
 import dateFormat from "dateformat";
 import { BsPerson } from "react-icons/bs";
 import { BiLeftArrow, BiUpArrowAlt } from "react-icons/bi";
 import { useState } from "react";
 import { Comment } from "../type";
 import Loader from "../components/Loader";
+import Like from "../components/Like";
 
 const PostDeatails = () => {
   const navigate = useNavigate();
   const { postId } = useParams();
   const [commentQuery, setCommentQuery] = useState("");
-  const [likePost, { isLoading: likeLoading }] = useLikePostMutation();
-  const [dislikePost, { isLoading: dislikeLoading }] = useDislikePostMutation();
   const { data: post,isLoading: postLoading } = useGetPostQuery(postId);
+  console.log(post)
   const {
     data: comments,
     isLoading,
@@ -39,13 +36,6 @@ const PostDeatails = () => {
     refetch();
   };
 
-  const handleLikeDislike = async () => {
-    if (post?.userHasLiked) {
-      await dislikePost(postId);
-    } else {
-      await likePost(postId);
-    }
-  };
   return (
     <div className="p-4">
       <button
@@ -67,15 +57,7 @@ const PostDeatails = () => {
         </div>
         <p className="my-2">{post?.post?.text}</p>
         <div className="flex gap-1">
-          {post?.userHasLiked ? (
-            <button onClick={handleLikeDislike} disabled={dislikeLoading}>
-              <IoMdHeart size={24}/>
-            </button>
-          ) : (
-            <button onClick={handleLikeDislike} disabled={likeLoading}>
-              <IoMdHeartEmpty size={24}/>
-            </button>
-          )}
+          <Like postId={postId as string} isLiked={post?.userHasLiked}/>
           <span>{post?.likes_count}</span>
         </div>
       </div>}
