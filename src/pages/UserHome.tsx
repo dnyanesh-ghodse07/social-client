@@ -15,7 +15,7 @@ const UserHome = () => {
   const { data: posts, isLoading, isError } = useGetAllPostsQuery({});
   const [createPost, { isLoading: createPostLoading }] =
     useCreatePostMutation();
-  if (isLoading) return <Loader/>;
+  if (isLoading) return <div className="h-screen w-full flex justify-center items-center"><Loader/></div> ;
   if (isError) return <p>Something went wrong..</p>;
 
   const handleSubmit = async () => {
