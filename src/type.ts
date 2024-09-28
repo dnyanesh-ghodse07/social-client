@@ -24,11 +24,26 @@ export interface Comment {
   __v: number;
 }
 
+interface User {
+  _id: string;
+  username: string;
+}
+
 export interface Post {
   _id: string;
   text: string;
-  likes_count: 0;
-  user: {
-    username: string;
-  };
+  likes_count: number;
+  userHasLiked?: boolean;
+  createdAt?: string,
+  user: User; // Reference to the User type
+}
+
+
+export interface PostDetail {
+  _id: string;
+  text: string;
+  likes_count: number;
+  userHasLiked?: boolean;
+  createdAt?: string,
+  user: User;
 }

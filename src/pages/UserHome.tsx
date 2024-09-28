@@ -32,7 +32,7 @@ const UserHome = () => {
     <div className="p-10">
       <div className="py-2 border-b-2 mb-4">
         <h2 className="text-2xl  capitalize text-cyan-600">
-          Welcome {posts?.posts?.[0]?.user?.username}
+          Welcome
         </h2>
         <div className="my-2 shadow-sm bg-slate-100 w-full h-36 flex flex-col items-end p-[4px]">
           <textarea

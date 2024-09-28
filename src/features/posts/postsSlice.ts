@@ -10,8 +10,13 @@ export const postsApiSlice = apiSlice.injectEndpoints({
       query: (id) => `/posts/${id}`,
       providesTags: (_result, _error, id) => [{ type: "Post", id }],
     }),
+    deletePost: builder.mutation({
+      query: (id) => ({ url: `/posts/${id}`, method: "DELETE" }),
+      invalidatesTags: ["Post"],
+    }),
     getUserPost: builder.query({
-      query: (userId) => `posts/${userId}`
+      query: () => `posts/user-posts`,
+      providesTags: ["Post"],
     }),
     createPost: builder.mutation({
       query: (newPost) => ({
@@ -37,27 +42,29 @@ export const postsApiSlice = apiSlice.injectEndpoints({
     }),
     commentOnPost: builder.mutation({
       query: ({ id, commentData }) => {
-        console.log(commentData)
+        console.log(commentData);
         return {
-         url: `/posts/${id}/comment`,
+          url: `/posts/${id}/comment`,
           method: "POST",
           body: commentData,
-        }
+        };
       },
       invalidatesTags: (_result, _error, id) => [{ type: "Post", id }],
     }),
     getPostComments: builder.query({
-      query: ({postId}) => `posts/${postId}/comment`
-    })
+      query: ({ postId }) => `posts/${postId}/comment`,
+    }),
   }),
 });
 
 export const {
   useGetAllPostsQuery,
   useGetPostQuery,
+  useGetUserPostQuery,
   useCreatePostMutation,
   useLikePostMutation,
   useDislikePostMutation,
   useCommentOnPostMutation,
-  useGetPostCommentsQuery
+  useGetPostCommentsQuery,
+  useDeletePostMutation,
 } = postsApiSlice;

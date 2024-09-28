@@ -15,13 +15,11 @@ import { Comment } from "../type";
 import Loader from "../components/Loader";
 
 const PostDeatails = () => {
-  const [commentQuery, setCommentQuery] = useState("");
   const navigate = useNavigate();
   const { postId } = useParams();
-
+  const [commentQuery, setCommentQuery] = useState("");
   const [likePost, { isLoading: likeLoading }] = useLikePostMutation();
   const [dislikePost, { isLoading: dislikeLoading }] = useDislikePostMutation();
-
   const { data: post,isLoading: postLoading } = useGetPostQuery(postId);
   const {
     data: comments,

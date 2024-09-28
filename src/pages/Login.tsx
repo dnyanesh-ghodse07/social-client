@@ -18,7 +18,7 @@ const Login = () => {
     e.preventDefault();
     const result = await dispatch(loginUser(credentials));
     if (result.meta.requestStatus === "fulfilled") {
-      navigate("/user-home");
+      navigate("/myspace");
     }
   };
 
@@ -26,7 +26,7 @@ const Login = () => {
     <div className="flex justify-center items-center h-[calc(100vh-100px)]">
       <form
         onSubmit={handleLogin}
-        className="flex flex-col gap-4 pb-8 pt-4 px-6 shadow-md"
+        className="flex flex-col gap-4 pb-8 pt-4 px-6 shadow-md md:min-w-96"
       >
         <h2 className="text-2xl">Login</h2>
         <input

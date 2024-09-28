@@ -11,7 +11,6 @@ interface LoginResponse {
 
 export const loginUser = createAsyncThunk<LoginResponse, Credentials>("auth/login", async (credentials) => {
   const response = await axiosInstance.post<LoginResponse>("/auth/login", credentials);
-
   localStorage.setItem("token", response?.data?.token);
 
   return response.data;
