@@ -11,13 +11,19 @@ import { useState } from "react";
 import { Comment } from "../type";
 import Loader from "../components/Loader";
 import Like from "../components/Like";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 const PostDeatails = () => {
   const navigate = useNavigate();
   const { postId } = useParams();
   const [commentQuery, setCommentQuery] = useState("");
-  const { data: post,isLoading: postLoading } = useGetPostQuery(postId);
-  console.log(post)
+  const { data: post, isLoading: postLoading, error } = useGetPostQuery(postId);
+  if (error && "status" in error) {
+    const fetchError = error as FetchBaseQueryError;
+    if (fetchError.status === 401) {
+      navigate("/login");
+    }
+  }
   const {
     data: comments,
     isLoading,
@@ -46,21 +52,25 @@ const PostDeatails = () => {
         <BiLeftArrow />
         Back
       </button>
-      {postLoading ? <div className="w-full h-56 flex justify-center items-center">
-            <Loader/>
-          </div> : <div>
-        <div className="flex justify-between">
-          <h2 className="text-slate-600">@{post?.post?.user_id?.username}</h2>
-          <span className="text-slate-400">
-            {dateFormat(post?.post?.createdAt, "fullDate")}
-          </span>
+      {postLoading ? (
+        <div className="w-full h-56 flex justify-center items-center">
+          <Loader />
         </div>
-        <p className="my-2">{post?.post?.text}</p>
-        <div className="flex gap-1">
-          <Like postId={postId as string} isLiked={post?.userHasLiked}/>
-          <span>{post?.likes_count}</span>
+      ) : (
+        <div>
+          <div className="flex justify-between">
+            <h2 className="text-slate-600">@{post?.post?.user_id?.username}</h2>
+            <span className="text-slate-400">
+              {dateFormat(post?.post?.createdAt, "fullDate")}
+            </span>
+          </div>
+          <p className="my-2">{post?.post?.text}</p>
+          <div className="flex gap-1">
+            <Like postId={postId as string} isLiked={post?.userHasLiked} />
+            <span>{post?.likes_count}</span>
+          </div>
         </div>
-      </div>}
+      )}
       <div className="flex items-center my-4 gap-2 w-full">
         <input
           value={commentQuery}
@@ -83,7 +93,7 @@ const PostDeatails = () => {
         {isError && <p>{"Something went wrong"}</p>}
         {isLoading ? (
           <div className="w-full h-full flex justify-center items-center">
-            <Loader/>
+            <Loader />
           </div>
         ) : (
           <div className="flex flex-col gap-2 mt-4">

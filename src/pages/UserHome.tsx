@@ -9,8 +9,9 @@ import {
   useDeletePostMutation,
   useGetUserPostQuery,
 } from "../features/posts/postsSlice";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 interface User {
   username: string;
@@ -24,11 +25,21 @@ interface Post {
 }
 
 const UserHome = () => {
+  const navigate = useNavigate();
   const [text, setText] = useState("");
-  const { data: posts, isLoading, isError } = useGetUserPostQuery({});
+  const { data: posts, isLoading, isError, error } = useGetUserPostQuery({});
   const [createPost, { isLoading: createPostLoading }] =
     useCreatePostMutation();
   const [deletePost, { isLoading: deleting }] = useDeletePostMutation();
+
+  //navigate to login if token expired
+  if (error && "status" in error) {
+    const fetchError = error as FetchBaseQueryError;
+    if (fetchError.status === 401) {
+      navigate("/login");
+    }
+  }
+
   if (isLoading)
     return (
       <div className="h-screen w-full flex justify-center items-center">
