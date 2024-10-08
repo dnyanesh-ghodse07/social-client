@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "./app/store";
 import CommunityPage from "./pages/CommunityPage";
 import './App.css';
+import Profile from "./pages/Profile";
 
 function App() {
   const isLogin = useSelector(
@@ -38,6 +39,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <UserHome />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/user/profile/:userId"
+              element={
+                <ProtectedRoute>
+                  <Profile />
                 </ProtectedRoute>
               }
             />

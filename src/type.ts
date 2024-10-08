@@ -24,12 +24,14 @@ export interface Comment {
   __v: number;
 }
 
-interface User {
+export interface User {
   _id: string;
   username: string;
+  email?: string;
+  createdAt?: string;
 }
 
-export interface Post {
+export interface PostType {
   _id: string;
   text: string;
   likes_count: number;
@@ -37,7 +39,6 @@ export interface Post {
   createdAt?: string,
   user: User; // Reference to the User type
 }
-
 
 export interface PostDetail {
   _id: string;
@@ -47,3 +48,4 @@ export interface PostDetail {
   createdAt?: string,
   user: User;
 }
+

@@ -5,13 +5,13 @@ import {
   useGetPostQuery,
 } from "../features/posts/postsSlice";
 import dateFormat from "dateformat";
-import { BsPerson } from "react-icons/bs";
 import { BiLeftArrow, BiUpArrowAlt } from "react-icons/bi";
 import { useState } from "react";
 import { Comment } from "../type";
 import Loader from "../components/Loader";
 import Like from "../components/Like";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import CommentBox from "../components/CommentBox";
 
 const PostDeatails = () => {
   const navigate = useNavigate();
@@ -21,7 +21,8 @@ const PostDeatails = () => {
   if (error && "status" in error) {
     const fetchError = error as FetchBaseQueryError;
     if (fetchError.status === 401) {
-      navigate("/login");
+      localStorage.removeItem('token');
+      // navigate("/login");
     }
   }
   const {
@@ -99,17 +100,7 @@ const PostDeatails = () => {
           <div className="flex flex-col gap-2 mt-4">
             {comments?.map((comment: Comment) => {
               return (
-                <div key={comment._id} className="">
-                  <div className="flex items-center gap-1">
-                    <BsPerson />
-                    <span className="font-bold text-sm">
-                      {comment?.user_id?.username}
-                    </span>
-                  </div>
-                  <div className="pl-5">
-                    <p>{comment?.text}</p>
-                  </div>
-                </div>
+                <CommentBox comment={comment}/>
               );
             })}
           </div>

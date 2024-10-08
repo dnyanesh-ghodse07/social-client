@@ -15,7 +15,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex justify-between items-center p-4 shadow-md sticky top-0 w-screen bg-slate-100">
+    <div className="z-50 flex justify-between items-center p-4 shadow-md sticky top-0 w-screen bg-slate-100">
       <div className="flex gap-1 items-center">
         <img width={50} src="/logo_no_bg.png" alt="" />
         <h2 className="text-2xl font-bold text-cyan-700">Social</h2>

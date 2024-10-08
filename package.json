@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "antd": "^5.21.2",
     "axios": "^1.7.7",
     "date-format": "^4.0.14",
     "dateformat": "^5.0.3",
