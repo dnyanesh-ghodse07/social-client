@@ -5,10 +5,14 @@ export const searchUserApiSlice = apiSlice.injectEndpoints({
     getSearchResult: builder.query({
       query: (q) => `users/search?q=${q}`,
     }),
+    getUser: builder.query({
+      query: (q) => `users/${q}`,
+    }),
   }),
 });
 
 
 export const {
-  useLazyGetSearchResultQuery
+  useLazyGetSearchResultQuery,
+  useGetUserQuery
 } = searchUserApiSlice

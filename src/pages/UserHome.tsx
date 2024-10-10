@@ -8,11 +8,14 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { PostType } from "../type";
 import PostUser from "../components/PostUser";
 import { Button } from "antd";
+import { useSelector } from "react-redux";
+import { RootState } from "../app/store";
 
 
 const UserHome = () => {
   const [text, setText] = useState("");
-  const { data: posts, isLoading, isError, error } = useGetUserPostQuery({});
+  const currentUserId = useSelector((state: RootState) => state.auth.userId);
+  const { data: posts, isLoading, isError, error } = useGetUserPostQuery(currentUserId);
   const [createPost, { isLoading: createPostLoading }] =
     useCreatePostMutation();
 
@@ -67,7 +70,7 @@ const UserHome = () => {
       </div>
       <div className="flex flex-col gap-4">
         {posts?.posts?.map((post: PostType) => {
-          return <PostUser post={post} />;
+          return <PostUser key={post._id} post={post} />;
         })}
       </div>
     </div>

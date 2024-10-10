@@ -23,8 +23,8 @@ function App() {
   return (
     <>
       <Router>
-        <Navbar />
         <div className="max-w-4xl mx-auto">
+        <Navbar />
           <Routes>
             <Route
               path="/"

@@ -5,18 +5,22 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Credentials } from "../type";
 import { AppDispatch } from "../app/store";
+import { Button,Input } from "antd";
 
 const Login = () => {
   const [credentials, setCredentials] = useState<Credentials>({
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     const result = await dispatch(loginUser(credentials));
+    setLoading(false);
     if (result.meta.requestStatus === "fulfilled") {
       navigate("/myspace");
     }
@@ -29,17 +33,19 @@ const Login = () => {
         className="flex flex-col gap-4 pb-8 pt-4 px-6 shadow-md md:min-w-96"
       >
         <h2 className="text-2xl">Login</h2>
-        <input
+        <Input
           type="email"
           placeholder="Email"
           className="p-2 border-[1px]"
+          required
           value={credentials.email}
           onChange={(e) =>
             setCredentials({ ...credentials, email: e.target.value })
           }
         />
-        <input
+        <Input
           type="password"
+          required
           placeholder="Password"
           className="p-2 border-[1px]"
           value={credentials.password}
@@ -47,12 +53,14 @@ const Login = () => {
             setCredentials({ ...credentials, password: e.target.value })
           }
         />
-        <button
-          className="p-2 mt-1 mb-2 bg-cyan-800 text-slate-100"
-          type="submit"
+        <Button
+          loading={loading}
+          className="p-2 mt-1 mb-2"
+          variant="solid" color="primary"
+          htmlType="submit"
         >
           Login
-        </button>
+        </Button>
         <p className="text-sm">
           Don't have an account ?
           <Link className="text-blue-800 text-sm pl-1" to="/register">

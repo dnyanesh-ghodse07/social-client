@@ -2,14 +2,16 @@ import { createSlice } from '@reduxjs/toolkit';
 import { loginUser, logoutUser } from './authAction';
 
 interface InitializeState{
-  user: unknown | null,
+  username: string | null,
+  userId: string | null,
   token: string | null,
   isAuthenticated: boolean
 }
 
 const initialState:InitializeState = {
-  user: null,
-  token: localStorage.getItem('token') || null, // Initialize from localStorage
+  username: localStorage.getItem('username') || null,
+  userId: localStorage.getItem('userId') || null,
+  token: localStorage.getItem('token') || null,
   isAuthenticated: !!localStorage.getItem('token')
 };
 
@@ -20,12 +22,14 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(loginUser.fulfilled, (state, action) => {
-        state.user = action.payload.user;
+        state.userId = action.payload.userId;
+        state.username = action.payload.username;
         state.token = action.payload.token;
         state.isAuthenticated = true;
       })
       .addCase(logoutUser.fulfilled, (state) => {
-        state.user = null;
+        state.username = null;
+        state.userId = null;
         state.token = null;
         state.isAuthenticated = false;
       });
