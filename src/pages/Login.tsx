@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Credentials } from "../type";
 import { AppDispatch } from "../app/store";
-import { Button,Input } from "antd";
+import { Button,Input, message } from "antd";
 
 const Login = () => {
   const [credentials, setCredentials] = useState<Credentials>({
@@ -15,6 +15,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const [messageApi, contextHolder] = message.useMessage();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,10 +25,18 @@ const Login = () => {
     if (result.meta.requestStatus === "fulfilled") {
       navigate("/myspace");
     }
+
+    if(result.meta.requestStatus === "rejected"){
+      messageApi.open({
+        type: 'error',
+        content: 'Invalid credentials',
+      });
+    }
   };
 
   return (
     <div className="flex justify-center items-center h-[calc(100vh-100px)]">
+      {contextHolder}
       <form
         onSubmit={handleLogin}
         className="flex flex-col gap-4 pb-8 pt-4 px-6 shadow-md md:min-w-96"

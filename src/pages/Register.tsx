@@ -16,8 +16,10 @@ const Register = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if(!credentials.email || !credentials.password || !credentials.username ) return;
+
     const result = await dispatch(registerUser(credentials));
     if (result.meta.requestStatus === "fulfilled") {
       navigate("/user-home");
@@ -26,13 +28,15 @@ const Register = () => {
   return (
     <div className="flex justify-center items-center h-[calc(100vh-100px)]">
       <form
-        onSubmit={handleLogin}
+        onSubmit={handleRegister}
         className="flex flex-col gap-4 pb-8 pt-4 px-6 border-[1px] md:min-w-96"
       >
         <h2 className="text-2xl">Register</h2>
         <Input
           type="text"
           placeholder="Username"
+          required
+          maxLength={20}
           className="p-2 border-[1px] outline-none"
           value={credentials.username}
           onChange={(e) =>
@@ -41,6 +45,7 @@ const Register = () => {
         />
         <Input
           type="email"
+          required
           placeholder="Email"
           className="p-2 border-[1px] outline-none"
           value={credentials.email}
@@ -50,6 +55,7 @@ const Register = () => {
         />
         <Input
           type="password"
+          required
           placeholder="Password"
           className="p-2 border-[1px] outline-none"
           value={credentials.password}

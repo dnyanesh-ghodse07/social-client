@@ -28,6 +28,13 @@ const Navbar = () => {
       },
     },
     {
+      label: "My Space",
+      key: "2",
+      onClick: () => {
+        navigate(`/myspace`);
+      },
+    },
+    {
       label: "Logout",
       key: "3",
       onClick: handleLogout,
@@ -43,9 +50,6 @@ const Navbar = () => {
       <div className="flex items-center gap-4">
         <NavLink className="text-cyan-600" to="/community">
           Community
-        </NavLink>
-        <NavLink className="text-cyan-600" to="/myspace">
-          My Space
         </NavLink>
         <div>
           {isAuthenticated && (

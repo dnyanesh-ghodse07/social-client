@@ -70,7 +70,7 @@ const Profile = () => {
       <h2 className="text-xl font-semibold py-2">Posts</h2>
       <div className="flex flex-col gap-2">
         {postData?.posts?.map((post: PostType) => {
-          return <PostUser post={post} />;
+          return <PostUser key={post._id} post={post} />;
         })}
       </div>
     </div>
