@@ -42,7 +42,7 @@ const Navbar = () => {
   ];
 
   return (
-    <div className="z-50 flex justify-between border-b-2 items-center py-2 sticky top-0 bg-white">
+    <div className="z-50 flex justify-between border-b-2 items-center py-2 px-4 sticky top-0 bg-white">
       <div className="flex gap-1 items-center">
         <img width={50} src="/logo_no_bg.png" alt="" />
         <h2 className="text-2xl font-bold text-cyan-700">Social</h2>
