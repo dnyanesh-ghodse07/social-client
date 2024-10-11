@@ -1,15 +1,35 @@
 import { useParams } from "react-router-dom";
-import { useGetUserQuery } from "../features/search/searchSlice";
+import {
+  useFollowUserMutation,
+  useGetFollowerQuery,
+  useGetUserQuery,
+  useUnfollowUserMutation,
+} from "../features/search/searchSlice";
 import { Button } from "antd";
 import { useGetUserPostQuery } from "../features/posts/postsSlice";
 import PostUser from "../components/PostUser";
 import { PostType } from "../type";
+import { useSelector } from "react-redux";
+import { RootState } from "../app/store";
 
 const Profile = () => {
   const { userId } = useParams();
+  const currentUserId =
+    useSelector((state: RootState) => state.auth.userId) === userId;
   const { data: userData } = useGetUserQuery(userId);
-  const { data: postData } =
-    useGetUserPostQuery(userId);
+  const { data: postData } = useGetUserPostQuery(userId);
+  const { data: followers } = useGetFollowerQuery(userId);
+
+  const [unFollow] = useUnfollowUserMutation();
+  const [followUser] = useFollowUserMutation();
+
+  const handleFollow = () => {
+    followUser(userId);
+  };
+
+  const handleUnfollow = () => {
+    unFollow(userId);
+  };
 
   return (
     <div className="mx-2 p-2">
@@ -18,15 +38,31 @@ const Profile = () => {
           <Avatar className="w-full h-full" />
         </div> */}
         <div className="flex flex-col gap-4 items-center w-full">
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 items-start">
             <h1>@{userData?.users?.username}</h1>
-            <Button color="primary" type="primary">Follow</Button>
-            <Button>Message</Button>
+            {!currentUserId && (
+              <>
+                {followers?.isFollowing ? (
+                  <Button
+                    color="primary"
+                    type="default"
+                    onClick={handleUnfollow}
+                  >
+                    Unfollow
+                  </Button>
+                ) : (
+                  <Button color="primary" type="primary" onClick={handleFollow}>
+                    Follow
+                  </Button>
+                )}
+                <Button>Message</Button>
+              </>
+            )}
           </div>
           <div className="flex gap-2 items-center font-semibold">
             <span>{postData?.totalPosts} Posts</span>
-            <span>2000 Followers</span>
-            <span>1000 Following</span>
+            <span>{followers?.followerCount} Followers</span>
+            <span>{followers?.followingCount} Following</span>
           </div>
           <p className="text-slate-400">To infinity and beyond!</p>
         </div>

@@ -15,7 +15,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ["Post"],
     }),
     getUserPost: builder.query({
-      query: (userId) => `posts/${userId}`,
+      query: (userId) => `posts/user/${userId}`,
       providesTags: ["Post"],
     }),
     createPost: builder.mutation({

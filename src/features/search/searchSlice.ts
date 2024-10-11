@@ -8,11 +8,31 @@ export const searchUserApiSlice = apiSlice.injectEndpoints({
     getUser: builder.query({
       query: (q) => `users/${q}`,
     }),
+    followUser: builder.mutation({
+      query: (id) => ({
+        url: `follow-unfollow/follow/${id}`,
+        method: "POST",
+      }),
+      invalidatesTags: ["Followers"]
+    }),
+    unfollowUser: builder.mutation({
+      query: (id) => ({
+        url: `follow-unfollow/unfollow/${id}`,
+        method: "POST",
+      }),
+      invalidatesTags: ["Followers"]
+    }),
+    getFollower: builder.query({
+      query: (id) => `follow-unfollow/followers/${id}`,
+      providesTags: ["Followers"],
+    }),
   }),
 });
 
-
 export const {
   useLazyGetSearchResultQuery,
-  useGetUserQuery
-} = searchUserApiSlice
+  useGetUserQuery,
+  useFollowUserMutation,
+  useGetFollowerQuery,
+  useUnfollowUserMutation,
+} = searchUserApiSlice;

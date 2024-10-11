@@ -3,7 +3,7 @@ import { CiUser } from "react-icons/ci";
 import { Link } from "react-router-dom";
 import { PostType } from "../type";
 import { useDeletePostMutation } from "../features/posts/postsSlice";
-import { FaHeart, FaRegComment } from "react-icons/fa";
+import { FaRegComment, FaHeart } from "react-icons/fa";
 import { Popover } from "antd";
 
 const PostUser = ({ post }: { post: PostType }) => {
@@ -12,7 +12,10 @@ const PostUser = ({ post }: { post: PostType }) => {
     deletePost(postId);
   };
   return (
-    <div key={post._id} className="min-w-56 flex-1 px-4 py-2 border-[1px] rounded-md">
+    <div
+      key={post._id}
+      className="min-w-56 flex-1 px-4 py-2 border-[1px] rounded-md"
+    >
       <div className="flex justify-between items-center">
         <p className="text-slate-400 flex items-center pb-1">
           <CiUser size={20} />@{post?.user?.username}
@@ -23,11 +26,16 @@ const PostUser = ({ post }: { post: PostType }) => {
           // onClick={() => handleDelete(post._id)}
         >
           <Popover
-          placement="left"
+            placement="left"
             content={
               <div className="flex justify-between text-sm">
                 <button className="border-b-2 text-xs">Cancel</button>
-                <button className="border-b-2 text-xs text-rose-400" onClick={() => handleDelete(post._id)}>Delete</button>
+                <button
+                  className="border-b-2 text-xs text-rose-400"
+                  onClick={() => handleDelete(post._id)}
+                >
+                  Delete
+                </button>
               </div>
             }
             title="Are you sure to delete this?"
