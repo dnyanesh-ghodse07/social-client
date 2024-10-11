@@ -47,7 +47,7 @@ const UserHome = () => {
   };
 
   return (
-    <div className="p-10">
+    <div className="p-4">
       <div className="py-2 border-b-2 mb-4">
         <h2 className="text-2xl capitalize text-cyan-600">Welcome</h2>
         <div className="my-2 w-full h-36 flex flex-col items-end">
