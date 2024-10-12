@@ -15,6 +15,8 @@ import { RootState } from "./app/store";
 import CommunityPage from "./pages/CommunityPage";
 import './App.css';
 import Profile from "./pages/Profile";
+import ChatRoom from "./pages/ChatRoom";
+import ChatList from "./pages/ChatList";
 
 function App() {
   const isLogin = useSelector(
@@ -43,10 +45,26 @@ function App() {
               }
             />
             <Route
+              path="/user/chat/:currentUserId/:selectedUserId"
+              element={
+                <ProtectedRoute>
+                  <ChatRoom />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/user/profile/:userId"
               element={
                 <ProtectedRoute>
                   <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/user/chats/:userId"
+              element={
+                <ProtectedRoute>
+                  <ChatList />
                 </ProtectedRoute>
               }
             />

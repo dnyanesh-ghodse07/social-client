@@ -34,6 +34,7 @@ const UserHome = () => {
         <Loader />
       </div>
     );
+    
   if (isError) return <p>Something went wrong..</p>;
 
   const handleSubmit = async () => {

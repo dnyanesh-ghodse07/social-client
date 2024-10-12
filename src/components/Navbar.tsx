@@ -28,19 +28,27 @@ const Navbar = () => {
       },
     },
     {
-      label: "My Space",
+      label: "Messages",
       key: "2",
+      onClick: () => {
+        navigate(`/user/chats/${userId}`);
+      },
+    },
+    {
+      label: "My Space",
+      key: "3",
       onClick: () => {
         navigate(`/myspace`);
       },
     },
     {
       label: "Logout",
-      key: "3",
+      key: "4",
       onClick: handleLogout,
     },
   ];
 
+ 
   return (
     <div className="z-50 flex justify-between border-b-2 items-center py-2 px-4 sticky top-0 bg-white">
       <div className="flex gap-1 items-center">

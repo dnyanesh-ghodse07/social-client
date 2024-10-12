@@ -2,7 +2,7 @@ import { PostType, User } from "../type";
 import { useGetAllPostsQuery } from "../features/posts/postsSlice";
 import Loader from "../components/Loader";
 import Post from "../components/PostPublic";
-import { useLazyGetSearchResultQuery } from "../features/search/searchSlice";
+import { useLazyGetSearchResultQuery } from "../features/user/userSlice";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 

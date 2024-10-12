@@ -4,18 +4,19 @@ import {
   useGetFollowerQuery,
   useGetUserQuery,
   useUnfollowUserMutation,
-} from "../features/search/searchSlice";
+} from "../features/user/userSlice";
 import { Button } from "antd";
 import { useGetUserPostQuery } from "../features/posts/postsSlice";
 import PostUser from "../components/PostUser";
 import { PostType } from "../type";
 import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
   const { userId } = useParams();
   const currentUserId =
-    useSelector((state: RootState) => state.auth.userId) === userId;
+    useSelector((state: RootState) => state.auth.userId);
   const { data: userData } = useGetUserQuery(userId);
   const { data: postData } = useGetUserPostQuery(userId);
   const { data: followers } = useGetFollowerQuery(userId);
@@ -40,7 +41,7 @@ const Profile = () => {
         <div className="flex flex-col gap-4 items-center w-full">
           <div className="flex gap-2 items-start">
             <h1>@{userData?.users?.username}</h1>
-            {!currentUserId && (
+            {currentUserId !== userId && (
               <>
                 {followers?.isFollowing ? (
                   <Button
@@ -55,7 +56,9 @@ const Profile = () => {
                     Follow
                   </Button>
                 )}
-                <Button>Message</Button>
+                <Link to={`/user/chat/${currentUserId}/${userId}`}>
+                  <Button>Message</Button>
+                </Link>
               </>
             )}
           </div>
