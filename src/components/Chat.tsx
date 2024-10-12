@@ -10,11 +10,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
 import { Button, Input } from "antd";
 
-// Initialize the socket once globally
-const socket = io("https://stoked-keyword-436905-f9.el.r.appspot.com", {
-  // withCredentials: true, // Allows credentials (like cookies) if needed
-});
-
 interface ChatProps {
   currentUserId: string | undefined;
   selectedUserId: string | undefined;
@@ -33,6 +28,14 @@ interface Message {
   _id: string;
   timestamp: string;
 }
+
+// Initialize the socket once globally
+const socket = io("https://stoked-keyword-436905-f9.el.r.appspot.com", {
+  withCredentials: true, // Allows credentials (like cookies) if needed
+  transports: ['polling', 'websocket'],
+});
+
+
 
 const Chat = ({ currentUserId, selectedUserId }: ChatProps) => {
   const [newMessage, setNewMessage] = useState("");

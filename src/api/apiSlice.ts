@@ -5,6 +5,7 @@ export const apiSlice = createApi({
     reducerPath: 'api',
     baseQuery: fetchBaseQuery({
         baseUrl:'https://stoked-keyword-436905-f9.el.r.appspot.com/api',
+        // baseUrl: "http://localhost:9000/api",
         prepareHeaders: (headers, {getState}) => {
             const token = (getState() as RootState).auth.token;
             if(token){
