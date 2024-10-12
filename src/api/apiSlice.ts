@@ -13,8 +13,10 @@ export const apiSlice = createApi({
             return headers;
         }
     }),
-    tagTypes: ['Post','User', "Comments", 'Followers'],
+    tagTypes: ['Post','User', "Comments", 'Followers', 'Chat'],
     endpoints: () => ({})
 })
+
+export const baseUrl = "http://localhost:9000";
 
 export default apiSlice;
