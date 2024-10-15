@@ -30,7 +30,7 @@ interface Message {
 }
 
 // Initialize the socket once globally
-const socket = io("https://stoked-keyword-436905-f9.el.r.appspot.com", {
+const socket = io("https://stoked-keyword-436905-f9.el.r.appspot.com/", {
   withCredentials: true, // Allows credentials (like cookies) if needed
   transports: ['polling', 'websocket'],
 });
