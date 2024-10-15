@@ -4,22 +4,28 @@ import {
   useGetFollowerQuery,
   useGetUserQuery,
   useUnfollowUserMutation,
+  useUploadProfilePicMutation,
 } from "../features/user/userSlice";
-import { Button } from "antd";
+import { Button, Modal } from "antd";
 import { useGetUserPostQuery } from "../features/posts/postsSlice";
 import PostUser from "../components/PostUser";
 import { PostType } from "../type";
 import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { TbUserEdit } from "react-icons/tb";
+import placeholderImage from '../assets/person_placeholder.jpg';
 
 const Profile = () => {
   const { userId } = useParams();
-  const currentUserId =
-    useSelector((state: RootState) => state.auth.userId);
+  const [selectedFile, setSelectedFile] = useState<File | null>();
+  const [uploadProfilePic, { isLoading }] = useUploadProfilePicMutation();
+  const currentUserId = useSelector((state: RootState) => state.auth.userId);
   const { data: userData } = useGetUserQuery(userId);
   const { data: postData } = useGetUserPostQuery(userId);
   const { data: followers } = useGetFollowerQuery(userId);
+  console.log(userData?.users?.profilePicture);
 
   const [unFollow] = useUnfollowUserMutation();
   const [followUser] = useFollowUserMutation();
@@ -32,13 +38,73 @@ const Profile = () => {
     unFollow(userId);
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!selectedFile) {
+      alert("Please select a file to upload.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("profilePicture", selectedFile);
+
+    try {
+      await uploadProfilePic(formData).unwrap(); // Unwrap returns the actual response or error
+      alert("Profile picture uploaded successfully!");
+    } catch (err) {
+      console.error("Failed to upload profile picture", err);
+    }
+  };
+
+  const [openModal, setOpenModal] = useState(false);
   return (
     <div className="mx-2 p-2">
-      <div className=" w-full max-h-56 rounded-md p-4 flex gap-4 mb-2">
-        {/* <div className="max-w-40 max-h-40">
-          <Avatar className="w-full h-full" />
-        </div> */}
-        <div className="flex flex-col gap-4 items-center w-full">
+      <div className="w-full justify-center items-center max-h-56 rounded-md p-4 flex gap-4 mb-2">
+        <div className="relative">
+        <img
+            className="w-36 h-36 rounded-full object-cover"
+            src={userData?.users?.profilePicture || placeholderImage}
+            alt="profile-pic"
+          /> 
+        {currentUserId === userId && <TbUserEdit size={24} className="cursor-pointer border border-slate-700 absolute -right-1 bg-white rounded-full p-1 bottom-4" onClick={() => setOpenModal(true)} />}
+        </div>
+        <Modal
+          title="Upload image"
+          open={openModal}
+          onCancel={() => setOpenModal(false)}
+          footer={
+            <div className="flex justify-end gap-1">
+              <Button onClick={() => setOpenModal(false)}>Cancel</Button>
+              <Button
+                disabled={isLoading}
+                type="primary"
+                color="primary"
+                onClick={handleSubmit}
+              >
+                Upload
+              </Button>
+            </div>
+          }
+        >
+          <label htmlFor="profile-pic">
+            <div className="flex border p-4 border-dotted gap-2 justify-center items-center">
+              <span>Choose photo</span>
+            </div>
+            <input
+              type="file"
+              id="profile-pic"
+              className="hidden"
+              accept="image/*"
+              onChange={handleFileChange}
+            />
+          </label>
+        </Modal>
+        <div className="flex flex-col gap-4 w-full text-sm">
           <div className="flex gap-2 items-start">
             <h1>@{userData?.users?.username}</h1>
             {currentUserId !== userId && (
