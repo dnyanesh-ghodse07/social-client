@@ -5,6 +5,7 @@ import { AppDispatch, RootState } from "../app/store";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Dropdown, MenuProps, Space } from "antd";
 import { IoPersonSharp } from "react-icons/io5";
+import { VscAccount, VscMail, VscSignOut } from "react-icons/vsc";
 
 const Navbar = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -26,29 +27,16 @@ const Navbar = () => {
       onClick: () => {
         navigate(`/user/profile/${userId}`);
       },
-    },
-    {
-      label: "Messages",
-      key: "2",
-      onClick: () => {
-        navigate(`/user/chats/${userId}`);
-      },
-    },
-    {
-      label: "My Space",
-      key: "3",
-      onClick: () => {
-        navigate(`/myspace`);
-      },
+      icon: <VscAccount/>
     },
     {
       label: "Logout",
       key: "4",
       onClick: handleLogout,
+      icon: <VscSignOut/>
     },
   ];
 
- 
   return (
     <div className="z-50 flex justify-between border-b-2 items-center py-2 px-4 sticky top-0 bg-white">
       <div className="flex gap-1 items-center">
@@ -58,6 +46,9 @@ const Navbar = () => {
       <div className="flex items-center gap-4">
         <NavLink className="text-cyan-600" to="/community">
           Community
+        </NavLink>
+        <NavLink className="text-cyan-600 cursor-pointer" to={`/user/chats/${userId}`}>
+        <VscMail size={30} />
         </NavLink>
         <div>
           {isAuthenticated && (

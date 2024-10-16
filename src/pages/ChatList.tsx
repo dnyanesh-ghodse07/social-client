@@ -24,7 +24,6 @@ interface ChatGroup {
 const ChatList = () => {
   const { userId } = useParams();
   const { data: allMessages } = useGetAllChatsQuery({ userId });
-  console.log(allMessages);
   return (
     <div>
       <h2 className="py-2 px-2 font-bold">Messages</h2>
@@ -33,7 +32,6 @@ const ChatList = () => {
           const otherUser = chat.members.filter(
             (member) => member._id !== userId
           );
-          console.log(otherUser[0]);
           return (
             <Link to={`/user/chat/${userId}/${otherUser[0]._id}`} key={chat._id}>
             <div className="flex justify-between border-y-[1px] p-[2px]">

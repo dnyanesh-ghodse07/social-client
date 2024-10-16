@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { CiUser } from "react-icons/ci";
 import { FaHeart, FaRegComment } from "react-icons/fa";
 import { PostType } from "../type";
+import PostPlaceholder from '../assets/post_images.png';
 
 const Post = ({ post }: { post: PostType }) => {
   return (
@@ -10,6 +11,9 @@ const Post = ({ post }: { post: PostType }) => {
         <p className="text-slate-400 flex items-center pb-1">
           <CiUser size={20} />@{post?.user?.username}
         </p>
+        <div className="w-full h-56">
+       <img className="h-full w-full object-cover" src={post?.postImageUrl || PostPlaceholder} alt={`post${post._id}`} />
+      </div>
         <p className="max-h-24 no-scrollbar overflow-scroll text-slate-600">
           {post.text}
         </p>

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Credentials } from "../type";
 import { AppDispatch } from "../app/store";
-import { Button,Input, message } from "antd";
+import { Button, Input, message } from "antd";
 
 const Login = () => {
   const [credentials, setCredentials] = useState<Credentials>({
@@ -23,13 +23,14 @@ const Login = () => {
     const result = await dispatch(loginUser(credentials));
     setLoading(false);
     if (result.meta.requestStatus === "fulfilled") {
-      navigate("/myspace");
+      const payload = result.payload as { userId: string };
+      navigate(`/user/profile/${payload.userId as string}`);
     }
 
-    if(result.meta.requestStatus === "rejected"){
+    if (result.meta.requestStatus === "rejected") {
       messageApi.open({
-        type: 'error',
-        content: 'Invalid credentials',
+        type: "error",
+        content: "Invalid credentials",
       });
     }
   };
@@ -65,7 +66,8 @@ const Login = () => {
         <Button
           loading={loading}
           className="p-2 mt-1 mb-2"
-          variant="solid" color="primary"
+          variant="solid"
+          color="primary"
           htmlType="submit"
         >
           Login

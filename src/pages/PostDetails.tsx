@@ -5,13 +5,15 @@ import {
   useGetPostQuery,
 } from "../features/posts/postsSlice";
 import dateFormat from "dateformat";
-import { BiLeftArrow, BiUpArrowAlt } from "react-icons/bi";
+import {BiUpArrowAlt } from "react-icons/bi";
+import { VscArrowLeft } from "react-icons/vsc";
 import { useState } from "react";
 import { Comment } from "../type";
 import Loader from "../components/Loader";
 import Like from "../components/Like";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import CommentBox from "../components/CommentBox";
+import PostPlaceholder from '../assets/post_images.png';
 
 const PostDeatails = () => {
   const navigate = useNavigate();
@@ -46,12 +48,10 @@ const PostDeatails = () => {
   return (
     <div className="p-4">
       <button
-        className="mb-4 text-slate-500 border-2 px-1 flex items-center"
+        className="mb-4 text-slate-500 flex items-center"
         onClick={() => navigate(-1)}
       >
-        {" "}
-        <BiLeftArrow />
-        Back
+        <VscArrowLeft size={24} />
       </button>
       {postLoading ? (
         <div className="w-full h-56 flex justify-center items-center">
@@ -64,6 +64,9 @@ const PostDeatails = () => {
             <span className="text-slate-400">
               {dateFormat(post?.post?.createdAt, "fullDate")}
             </span>
+          </div>
+          <div className="w-full h-96">
+          <img className="h-full w-full object-contain" src={post?.post?.postImageUrl || PostPlaceholder} alt={`post${postId}`} />
           </div>
           <p className="my-2">{post?.post?.text}</p>
           <div className="flex gap-1">

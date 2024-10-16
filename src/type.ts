@@ -35,6 +35,7 @@ export interface PostType {
   _id: string;
   text: string;
   likes_count: number;
+  postImageUrl?: string;
   userHasLiked?: boolean;
   createdAt?: string,
   user: User; // Reference to the User type

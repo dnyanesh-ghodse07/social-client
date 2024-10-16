@@ -5,12 +5,14 @@ import { PostType } from "../type";
 import { useDeletePostMutation } from "../features/posts/postsSlice";
 import { FaRegComment, FaHeart } from "react-icons/fa";
 import { Popover } from "antd";
-
+import PostPlaceholder from '../assets/post_images.png';
 const PostUser = ({ post }: { post: PostType }) => {
   const [deletePost, { isLoading: deleting }] = useDeletePostMutation();
   const handleDelete = (postId: string) => {
     deletePost(postId);
   };
+
+  console.log(post)
   return (
     <div
       key={post._id}
@@ -46,8 +48,11 @@ const PostUser = ({ post }: { post: PostType }) => {
         </button>
       </div>
       <Link to={`/myspace/post/${post._id}`}>
+      <div className="w-full h-56">
+       <img className="h-full w-full object-cover" src={post?.postImageUrl || PostPlaceholder} alt={`post${post._id}`} />
+      </div>
         <p className="max-h-24 no-scrollbar overflow-scroll text-slate-600">
-          {post.text}
+          {post.text.substring(0,150)}...
         </p>
       </Link>
       <div className="flex gap-2 items-center pt-2">

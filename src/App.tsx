@@ -5,7 +5,6 @@ import {
   Navigate,
 } from "react-router-dom";
 import Login from "./pages/Login";
-import UserHome from "./pages/UserHome";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PostDeatails from "./pages/PostDetails";
 import Navbar from "./components/Navbar";
@@ -36,14 +35,6 @@ function App() {
             />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route
-              path="/myspace"
-              element={
-                <ProtectedRoute>
-                  <UserHome />
-                </ProtectedRoute>
-              }
-            />
             <Route
               path="/user/chat/:currentUserId/:selectedUserId"
               element={
