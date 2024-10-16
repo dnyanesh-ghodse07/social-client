@@ -47,9 +47,9 @@ const Navbar = () => {
         <NavLink className="text-cyan-600" to="/community">
           Community
         </NavLink>
-        <NavLink className="text-cyan-600 cursor-pointer" to={`/user/chats/${userId}`}>
+        {isAuthenticated && <NavLink className="text-cyan-600 cursor-pointer" to={`/user/chats/${userId}`}>
         <VscMail size={30} />
-        </NavLink>
+        </NavLink>}
         <div>
           {isAuthenticated && (
             <Dropdown menu={{ items }} trigger={["click"]}>

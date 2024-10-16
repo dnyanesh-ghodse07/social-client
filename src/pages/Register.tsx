@@ -22,7 +22,7 @@ const Register = () => {
 
     const result = await dispatch(registerUser(credentials));
     if (result.meta.requestStatus === "fulfilled") {
-      navigate("/user-home");
+      navigate("/login");
     }
   };
   return (

@@ -7,7 +7,10 @@ import {
   useUploadProfilePicMutation,
 } from "../features/user/userSlice";
 import { Button, message, Modal } from "antd";
-import { useCreatePostMutation, useGetUserPostQuery } from "../features/posts/postsSlice";
+import {
+  useCreatePostMutation,
+  useGetUserPostQuery,
+} from "../features/posts/postsSlice";
 import PostUser from "../components/PostUser";
 import { PostType } from "../type";
 import { useSelector } from "react-redux";
@@ -19,7 +22,6 @@ import placeholderImage from "../assets/person_placeholder.jpg";
 import Loader from "../components/Loader";
 import TextArea from "antd/es/input/TextArea";
 
-
 const Profile = () => {
   const { userId } = useParams();
   const [messageApi, contextHolder] = message.useMessage();
@@ -30,7 +32,7 @@ const Profile = () => {
   const [openModal, setOpenModal] = useState(false);
   const [openMessageModal, setOpenMessageModal] = useState(false);
   const [uploadProfilePic, { isLoading }] = useUploadProfilePicMutation();
-  const [createPost, {isLoading: isPostCreating}] = useCreatePostMutation();
+  const [createPost, { isLoading: isPostCreating }] = useCreatePostMutation();
   const currentUserId = useSelector((state: RootState) => state.auth.userId);
   const { data: userData, isLoading: loadingUserData } =
     useGetUserQuery(userId);
@@ -47,7 +49,7 @@ const Profile = () => {
   const handleUnfollow = () => {
     unFollow(userId);
   };
-console.log(postData);
+  console.log(postData);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
@@ -71,7 +73,10 @@ console.log(postData);
 
     try {
       await uploadProfilePic(formData).unwrap(); // Unwrap returns the actual response or error
-      alert("Profile picture uploaded successfully!");
+      messageApi.open({
+        type: "success",
+        content: "Profile picture uploaded successfully!",
+      });
     } catch (err) {
       console.error("Failed to upload profile picture", err);
     }
@@ -79,7 +84,10 @@ console.log(postData);
 
   const handlePostImageSubmit = async () => {
     if (!selectedPostFile) {
-      alert("Please select a file to upload.");
+      messageApi.open({
+        type: "info",
+        content: "Please select a file to upload.",
+      });
       return;
     }
 
@@ -88,13 +96,13 @@ console.log(postData);
     formData.append("text", messageInputValue);
 
     try {
-     await createPost(formData).unwrap(); // Unwrap returns the actual response or error
-     setMessageInputValue('')
-     setOpenMessageModal(false);
-     messageApi.open({
-      type: "success",
-      content: "Post created successfully.",
-    });
+      await createPost(formData).unwrap(); // Unwrap returns the actual response or error
+      setMessageInputValue("");
+      setOpenMessageModal(false);
+      messageApi.open({
+        type: "success",
+        content: "Post created successfully.",
+      });
     } catch (err) {
       console.error("Failed to upload profile picture", err);
     }
@@ -103,7 +111,7 @@ console.log(postData);
   if (loadingUserData) return <Loader />;
   return (
     <div className="mx-2 p-2">
-       {contextHolder}
+      {contextHolder}
       <div className="w-full flex justify-center max-h-56 rounded-md p-4 gap-4 mb-2">
         <div className="relative w-36 h-36">
           <img
@@ -205,7 +213,7 @@ console.log(postData);
         }
       >
         <div>
-        <label htmlFor="post-pic">
+          <label htmlFor="post-pic">
             <div className="flex border p-4 border-dotted gap-2 justify-center items-center">
               <span>Choose post image</span>
             </div>
