@@ -49,7 +49,7 @@ const Profile = () => {
   const handleUnfollow = () => {
     unFollow(userId);
   };
-  console.log(postData);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
@@ -190,9 +190,9 @@ const Profile = () => {
           <p className="text-slate-400">To infinity and beyond!</p>
         </div>
       </div>
-      <div>
+      {currentUserId === userId && <div>
         <Button onClick={() => setOpenMessageModal(true)}>Create Post</Button>
-      </div>
+      </div>}
       <Modal
         title="Create Post"
         onCancel={() => setOpenMessageModal(false)}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import {
   useGetChatMessagesQuery,
@@ -32,15 +32,15 @@ interface Message {
 // Initialize the socket once globally
 const socket = io("https://stoked-keyword-436905-f9.el.r.appspot.com/", {
   withCredentials: true, // Allows credentials (like cookies) if needed
-  transports: ['polling', 'websocket'],
+  transports: ["polling", "websocket"],
 });
-
-
 
 const Chat = ({ currentUserId, selectedUserId }: ChatProps) => {
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const currentUser = useSelector((state: RootState) => state.auth.username);
+
+  const chatContainerRef = useRef<HTMLDivElement | null>(null);
 
   // Fetch chat messages between the current user and the selected user
   const { data: fetchedMessages, isLoading } = useGetChatMessagesQuery({
@@ -67,6 +67,14 @@ const Chat = ({ currentUserId, selectedUserId }: ChatProps) => {
   }, [fetchedMessages]);
 
   console.log(fetchedMessages);
+
+  // Scroll to bottom whenever messages change
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   // Listen for incoming messages
   useEffect(() => {
@@ -98,6 +106,12 @@ const Chat = ({ currentUserId, selectedUserId }: ChatProps) => {
 
         // Clear the input after sending
         setNewMessage("");
+
+        // Scroll to bottom after sending the message
+        if (chatContainerRef.current) {
+          chatContainerRef.current.scrollTop =
+            chatContainerRef.current.scrollHeight;
+        }
       } catch (error) {
         console.error("Failed to send message:", error);
       }
@@ -105,7 +119,7 @@ const Chat = ({ currentUserId, selectedUserId }: ChatProps) => {
   };
 
   return (
-    <div className="bg-slate-100 relative">
+    <div className="bg-slate-100 relative p-2">
       {isLoading ? (
         <p>Loading messages...</p>
       ) : (
@@ -114,7 +128,7 @@ const Chat = ({ currentUserId, selectedUserId }: ChatProps) => {
             <h1>{user?.users.username}</h1>
             <h1>{currentUser}(You)</h1>
           </div>
-          <div className="flex flex-col gap-2 p-2 h-[calc(100vh-180px)] overflow-auto">
+          <div ref={chatContainerRef} className="flex flex-col gap-2 p-2 h-[calc(100vh-180px)] overflow-auto">
             {messages.length === 0 && (
               <h1 className="text-center">No Messages</h1>
             )}

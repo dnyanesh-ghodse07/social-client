@@ -6,13 +6,12 @@ import { useDeletePostMutation } from "../features/posts/postsSlice";
 import { FaRegComment, FaHeart } from "react-icons/fa";
 import { Popover } from "antd";
 import PostPlaceholder from '../assets/post_images.png';
+
 const PostUser = ({ post }: { post: PostType }) => {
   const [deletePost, { isLoading: deleting }] = useDeletePostMutation();
   const handleDelete = (postId: string) => {
     deletePost(postId);
   };
-
-  console.log(post)
   return (
     <div
       key={post._id}
