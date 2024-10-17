@@ -33,7 +33,7 @@ const ChatList = () => {
           const otherUser = chat.members.filter(
             (member) => member._id !== userId
           );
-          const sentOrReceive = chat.lastMessage.sender._id !== userId ? 'Sent' : 'Received';
+          const sentOrReceive = chat.lastMessage.sender._id === userId ? 'Sent' : 'Received';
           return (
             <Link to={`/user/chat/${userId}/${otherUser[0]._id}`} key={chat._id}>
             <div className="flex justify-between border-y-[1px] p-[2px]">
