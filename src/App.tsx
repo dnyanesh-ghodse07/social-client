@@ -46,9 +46,9 @@ function App() {
             <Route
               path="/user/profile/:userId"
               element={
-                <ProtectedRoute>
+                // <ProtectedRoute>
                   <Profile />
-                </ProtectedRoute>
+                // </ProtectedRoute>
               }
             />
             <Route
@@ -70,17 +70,15 @@ function App() {
             <Route
               path="/community"
               element={
-                <ProtectedRoute>
                   <CommunityPage />
-                </ProtectedRoute>
               }
             />
             <Route
               path="/community/post/:postId"
               element={
-                <ProtectedRoute>
+                // <ProtectedRoute>
                   <PostDeatails />
-                </ProtectedRoute>
+                // </ProtectedRoute>
               }
             />
           </Routes>

@@ -8,6 +8,9 @@ export const searchUserApiSlice = apiSlice.injectEndpoints({
     getUser: builder.query({
       query: (q) => `users/${q}`,
     }),
+    getTopUsers: builder.query({
+      query: () => `users/top`,
+    }),
     uploadProfilePic: builder.mutation({
       query: (profilePicture) => ({
         url: `users/update-profile-picture`,
@@ -39,6 +42,7 @@ export const searchUserApiSlice = apiSlice.injectEndpoints({
 export const {
   useLazyGetSearchResultQuery,
   useGetUserQuery,
+  useGetTopUsersQuery,
   useFollowUserMutation,
   useGetFollowerQuery,
   useUnfollowUserMutation,

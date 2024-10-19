@@ -3,11 +3,15 @@ import {
   useDislikePostMutation,
   useLikePostMutation,
 } from "../features/posts/postsSlice";
+import useNavigateToLogin from "../hooks/useNavigateToLogin";
 
 const Like = ({ postId, isLiked }: {postId: string, isLiked: boolean}) => {
   const [likePost, { isLoading: likeLoading }] = useLikePostMutation();
   const [dislikePost, { isLoading: dislikeLoading }] = useDislikePostMutation();
+  const checkLogin = useNavigateToLogin();
+
   const handleLikeDislike = async () => {
+    checkLogin();
     if (isLiked) {
       await dislikePost(postId);
     } else {

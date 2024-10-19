@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   useFollowUserMutation,
   useGetFollowerQuery,
@@ -15,7 +15,6 @@ import PostUser from "../components/PostUser";
 import { PostType } from "../type";
 import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
-import { Link } from "react-router-dom";
 import { useState } from "react";
 import { TbUserEdit } from "react-icons/tb";
 import placeholderImage from "../assets/person_placeholder.jpg";
@@ -24,10 +23,13 @@ import TextArea from "antd/es/input/TextArea";
 
 const Profile = () => {
   const { userId } = useParams();
+  const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
   const [selectedFile, setSelectedFile] = useState<File | null>();
   const [selectedPostFile, setSelectedPostFile] = useState<File | null>();
-
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
   const [messageInputValue, setMessageInputValue] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [openMessageModal, setOpenMessageModal] = useState(false);
@@ -43,6 +45,9 @@ const Profile = () => {
   const [followUser] = useFollowUserMutation();
 
   const handleFollow = () => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
     followUser(userId);
   };
 
@@ -108,14 +113,22 @@ const Profile = () => {
     }
   };
 
+  const handleMessage = () => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    } else {
+      navigate(`/user/chat/${currentUserId}/${userId}`);
+    }
+  };
+
   if (loadingUserData) return <Loader />;
   return (
     <div className="mx-2 p-2">
       {contextHolder}
-      <div className="w-full flex justify-center max-h-56 rounded-md p-4 gap-4 mb-2">
-        <div className="relative w-36 h-36">
+      <div className="flex justify-center max-h-56 rounded-md p-4 gap-4 mb-2 border-b-[1px]">
+        <div className="relative">
           <img
-            className="w-full h-full rounded-full object-cover"
+            className="w-24 md:w-34 rounded-full object-cover"
             src={userData?.users?.profilePicture || placeholderImage}
             alt="profile-pic"
           />
@@ -158,11 +171,11 @@ const Profile = () => {
             />
           </label>
         </Modal>
-        <div className="flex-auto flex flex-col gap-4 w-full text-sm">
-          <div className="flex gap-2 items-start">
+        <div className="flex-1 flex flex-col gap-4 text-sm">
+          <div className="flex flex-col md:flex-row gap-2 items-start">
             <h1>@{userData?.users?.username}</h1>
             {currentUserId !== userId && (
-              <>
+              <div className="flex gap-2">
                 {followers?.isFollowing ? (
                   <Button
                     color="primary"
@@ -176,10 +189,8 @@ const Profile = () => {
                     Follow
                   </Button>
                 )}
-                <Link to={`/user/chat/${currentUserId}/${userId}`}>
-                  <Button>Message</Button>
-                </Link>
-              </>
+                <Button onClick={handleMessage}>Message</Button>
+              </div>
             )}
           </div>
           <div className="flex gap-2 items-center font-semibold">
@@ -190,9 +201,11 @@ const Profile = () => {
           <p className="text-slate-400">To infinity and beyond!</p>
         </div>
       </div>
-      {currentUserId === userId && <div>
-        <Button onClick={() => setOpenMessageModal(true)}>Create Post</Button>
-      </div>}
+      {currentUserId === userId && (
+        <div>
+          <Button onClick={() => setOpenMessageModal(true)}>Create Post</Button>
+        </div>
+      )}
       <Modal
         title="Create Post"
         onCancel={() => setOpenMessageModal(false)}

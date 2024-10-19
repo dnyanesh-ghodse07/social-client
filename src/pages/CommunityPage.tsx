@@ -2,14 +2,19 @@ import { PostType, User } from "../type";
 import { useGetAllPostsQuery } from "../features/posts/postsSlice";
 import Loader from "../components/Loader";
 import Post from "../components/PostPublic";
-import { useLazyGetSearchResultQuery } from "../features/user/userSlice";
+import { useGetTopUsersQuery, useLazyGetSearchResultQuery } from "../features/user/userSlice";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Search from "antd/es/input/Search";
+import { Avatar } from "antd";
+import UserIcon from '../assets/person_placeholder.jpg';
 
 const CommunityPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [focused, setFocused] = useState(false);
   const { data: posts, isLoading, isError } = useGetAllPostsQuery({});
+  const { data: topUsers } = useGetTopUsersQuery({});
+
   const [triggerSearch, { data: searchResult, isLoading: isSearchLoading }] =
     useLazyGetSearchResultQuery();
 
@@ -29,7 +34,6 @@ const CommunityPage = () => {
       setFocused(false);
     }, 100);
   };
-  console.log(searchResult);
 
   if (isLoading)
     return (
@@ -44,19 +48,19 @@ const CommunityPage = () => {
         <p className="text-red-300 text-xl">Something went wrong !</p>
       </div>
     );
+
   return (
     <div className="p-4">
       <div className="w-full relative">
-        <input
-          className="p-2 border w-full outline-none"
-          type="text"
+        <Search
+          width={100}
+          onBlur={handleBlur}
+          onFocus={() => setFocused(true)}
           placeholder="Search users"
           onChange={(e) => setSearchTerm(e.target.value)}
-          onFocus={() => setFocused(true)}
-          onBlur={handleBlur}
         />
         {focused && searchTerm && (
-          <div className="max-h-56 overflow-auto flex flex-col gap-2 absolute shadow-md rounded-b-md bg-slate-200 p-1 w-full">
+          <div className="max-h-56 overflow-auto flex flex-col gap-2 absolute shadow-md rounded-b-md bg-slate-200 p-2 mt-1 w-full">
             {isSearchLoading && <Loader />}
             {searchResult?.length == 0 ? (
               <div className="text-amber-900">
@@ -66,9 +70,14 @@ const CommunityPage = () => {
               searchResult?.map((user: User) => {
                 return (
                   <Link key={user._id} to={`/user/profile/${user._id}`}>
-                    <div className="bg-white p-1 rounded-md">
-                      <span className="text-slate-500">{user.username}</span>
-                      <p>{user.email}</p>
+                    <div className="bg-white p-2 text-sm rounded-md flex items-center gap-2">
+                      <div>
+                        <Avatar src={user.profilePicture || UserIcon} />
+                      </div>
+                      <div>
+                        <span className="text-slate-500">@{user.username}</span>
+                        <p>{user.email}</p>
+                      </div>
                     </div>
                   </Link>
                 );
@@ -77,6 +86,19 @@ const CommunityPage = () => {
           </div>
         )}
       </div>
+      <div className="my-2 border-b-2">
+          <h6>Suggested Users</h6>
+          <div className="flex gap-2 p-2 overflow-auto">
+          {topUsers?.users?.map((user:User) => {
+            return <Link key={user?._id}  to={`/user/profile/${user._id}`}>
+            <div className="flex flex-col items-center">
+              <Avatar className="-z-10" src={user?.profilePicture || UserIcon} />
+              <span className="text-sm font-thin">{user?.username}</span>
+            </div>
+            </Link>
+          })}
+          </div>
+        </div>
       <h1 className="my-4 text-xl">Community</h1>
       <div className="flex flex-col gap-4">
         {posts?.posts?.map((post: PostType) => (

@@ -14,12 +14,16 @@ import Like from "../components/Like";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import CommentBox from "../components/CommentBox";
 import PostPlaceholder from '../assets/post_images.png';
+import useNavigateToLogin from "../hooks/useNavigateToLogin";
+import { Link } from "react-router-dom";
 
 const PostDeatails = () => {
   const navigate = useNavigate();
+  const checkLogin = useNavigateToLogin();
   const { postId } = useParams();
   const [commentQuery, setCommentQuery] = useState("");
   const { data: post, isLoading: postLoading, error } = useGetPostQuery(postId);
+  const [addComment] = useCommentOnPostMutation();
   if (error && "status" in error) {
     const fetchError = error as FetchBaseQueryError;
     if (fetchError.status === 401) {
@@ -34,8 +38,8 @@ const PostDeatails = () => {
     refetch,
   } = useGetPostCommentsQuery({ postId });
 
-  const [addComment] = useCommentOnPostMutation();
   const handleAddComment = async () => {
+    checkLogin();
     if (!commentQuery) return;
     await addComment({
       id: postId,
@@ -60,7 +64,7 @@ const PostDeatails = () => {
       ) : (
         <div>
           <div className="flex justify-between">
-            <h2 className="text-slate-600">@{post?.post?.user_id?.username}</h2>
+            <Link to={`/user/profile/${post?.post?.user_id?._id}`} className="text-slate-600">@{post?.post?.user_id?.username}</Link>
             <span className="text-slate-400">
               {dateFormat(post?.post?.createdAt, "fullDate")}
             </span>
@@ -103,7 +107,7 @@ const PostDeatails = () => {
           <div className="flex flex-col gap-2 mt-4">
             {comments?.map((comment: Comment) => {
               return (
-                <CommentBox comment={comment}/>
+                <CommentBox key={comment._id} comment={comment}/>
               );
             })}
           </div>

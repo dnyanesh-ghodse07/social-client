@@ -6,6 +6,9 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { Dropdown, MenuProps, Space } from "antd";
 import { IoPersonSharp } from "react-icons/io5";
 import { VscAccount, VscMail, VscSignOut } from "react-icons/vsc";
+import { CgFeed } from "react-icons/cg";
+import { BiLogIn } from "react-icons/bi";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -27,13 +30,13 @@ const Navbar = () => {
       onClick: () => {
         navigate(`/user/profile/${userId}`);
       },
-      icon: <VscAccount/>
+      icon: <VscAccount />,
     },
     {
       label: "Logout",
       key: "4",
       onClick: handleLogout,
-      icon: <VscSignOut/>
+      icon: <VscSignOut />,
     },
   ];
 
@@ -44,12 +47,24 @@ const Navbar = () => {
         <h2 className="text-2xl font-bold text-cyan-700">Social</h2>
       </div>
       <div className="flex items-center gap-4">
-        <NavLink className="text-cyan-600" to="/community">
-          Community
+        <NavLink className="text-cyan-600 flex items-center justify-center gap-1" to="/community">
+          <CgFeed size={24} />
+          <span className="hidden md:block">Community</span>
         </NavLink>
-        {isAuthenticated && <NavLink className="text-cyan-600 cursor-pointer" to={`/user/chats/${userId}`}>
-        <VscMail size={30} />
-        </NavLink>}
+        {!isAuthenticated && (
+          <Link to="/login" className="flex items-center justify-center text-cyan-700">
+            <span className="hidden md:block"> Login</span>
+            <BiLogIn size={24} />
+          </Link>
+        )}
+        {isAuthenticated && (
+          <NavLink
+            className="text-cyan-600 cursor-pointer"
+            to={`/user/chats/${userId}`}
+          >
+            <VscMail size={30} />
+          </NavLink>
+        )}
         <div>
           {isAuthenticated && (
             <Dropdown menu={{ items }} trigger={["click"]}>
