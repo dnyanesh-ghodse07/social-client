@@ -54,13 +54,16 @@ const CommunityPage = () => {
       <div className="w-full relative">
         <Search
           width={100}
+          className="text-xl"
+          size="large"
+          status=""
           onBlur={handleBlur}
           onFocus={() => setFocused(true)}
           placeholder="Search users"
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         {focused && searchTerm && (
-          <div className="max-h-56 overflow-auto flex flex-col gap-2 absolute shadow-md rounded-b-md bg-slate-200 p-2 mt-1 w-full">
+          <div className="max-h-56 overflow-auto flex flex-col gap-2 absolute shadow-md rounded-md bg-slate-100 p-2 mt-1 w-full">
             {isSearchLoading && <Loader />}
             {searchResult?.length == 0 ? (
               <div className="text-amber-900">

@@ -46,7 +46,7 @@ const Login = () => {
         <Input
           type="email"
           placeholder="Email"
-          className="p-2 border-[1px]"
+          className="p-2 border-[1px] text-[16px]"
           required
           value={credentials.email}
           onChange={(e) =>
@@ -57,15 +57,16 @@ const Login = () => {
           type="password"
           required
           placeholder="Password"
-          className="p-2 border-[1px]"
+          className="p-2 border-[1px] text-[16px]"
           value={credentials.password}
           onChange={(e) =>
             setCredentials({ ...credentials, password: e.target.value })
           }
         />
         <Button
+          size="large"
           loading={loading}
-          className="p-2 mt-1 mb-2"
+          className="p-2 mt-1 mb-2 text-[16px]"
           variant="solid"
           color="primary"
           htmlType="submit"
