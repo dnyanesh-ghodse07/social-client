@@ -29,7 +29,7 @@ const Register = () => {
     <div className="flex justify-center items-center h-[calc(100vh-100px)]">
       <form
         onSubmit={handleRegister}
-        className="flex flex-col gap-4 pb-8 pt-4 px-6 border-[1px] md:min-w-96"
+        className="flex flex-col gap-4 pb-8 pt-4 px-6 md:border-[1px] sm:w-96 w-full"
       >
         <h2 className="text-2xl">Register</h2>
         <Input
@@ -37,7 +37,7 @@ const Register = () => {
           placeholder="Username"
           required
           maxLength={20}
-          className="p-2 border-[1px] outline-none"
+          className="p-2 border-[1px] outline-none text-[16px]"
           value={credentials.username}
           onChange={(e) =>
             setCredentials({ ...credentials, username: e.target.value })
@@ -47,7 +47,7 @@ const Register = () => {
           type="email"
           required
           placeholder="Email"
-          className="p-2 border-[1px] outline-none"
+          className="p-2 border-[1px] outline-none text-[16px]"
           value={credentials.email}
           onChange={(e) =>
             setCredentials({ ...credentials, email: e.target.value })
@@ -57,13 +57,13 @@ const Register = () => {
           type="password"
           required
           placeholder="Password"
-          className="p-2 border-[1px] outline-none"
+          className="p-2 border-[1px] outline-none text-[16px]"
           value={credentials.password}
           onChange={(e) =>
             setCredentials({ ...credentials, password: e.target.value })
           }
         />
-        <Button htmlType="submit" variant="solid" color="primary" className="p-2 mt-2">Signup</Button>
+        <Button htmlType="submit" size="large" variant="solid" color="primary" className="p-2 mt-2 text-[16px]">Signup</Button>
         <p className="text-sm">
           Already have an account ?
           <Link className="text-blue-800" to="/login">

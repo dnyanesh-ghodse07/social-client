@@ -40,7 +40,7 @@ const Login = () => {
       {contextHolder}
       <form
         onSubmit={handleLogin}
-        className="flex flex-col gap-4 pb-8 pt-4 px-6 shadow-md md:min-w-96"
+        className="flex flex-col gap-4 pb-8 pt-4 px-6 md:border-[1px] sm:w-96 w-full"
       >
         <h2 className="text-2xl">Login</h2>
         <Input
