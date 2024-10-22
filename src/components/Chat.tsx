@@ -153,7 +153,7 @@ const Chat = ({ currentUserId, selectedUserId }: ChatProps) => {
       <div className="sticky bottom-2 flex w-full mt-2 bg-white shadow-md p-2 rounded-lg">
         <Input
           type="text"
-          className="p-2 w-full"
+          className="p-2 w-full text-[16px]"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Type a message..."
