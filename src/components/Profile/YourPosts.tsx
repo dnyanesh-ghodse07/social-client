@@ -13,7 +13,7 @@ const YourPosts = () => {
       <div className="flex flex-col gap-2">
         {!postData?.posts?.length && <NoData message="No post available" />}
         {postData?.posts?.map((post: PostType) => {
-          return <PostUser key={post._id} post={post} userId={userId} />;
+          return <PostUser key={post._id} post={post} />;
         })}
       </div>
     </div>
