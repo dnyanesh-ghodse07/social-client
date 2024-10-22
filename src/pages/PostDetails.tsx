@@ -69,7 +69,7 @@ const PostDeatails = () => {
               {dateFormat(post?.post?.createdAt, "fullDate")}
             </span>
           </div>
-          <div className="w-full h-96">
+          <div className="w-full h-96 py-4">
           <img className="h-full w-full object-contain" src={post?.post?.postImageUrl || PostPlaceholder} alt={`post${postId}`} />
           </div>
           <p className="my-2">{post?.post?.text}</p>

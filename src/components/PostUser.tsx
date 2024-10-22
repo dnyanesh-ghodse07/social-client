@@ -9,10 +9,12 @@ import PostPlaceholder from '../assets/post_images.png';
 import { RootState } from "../app/store";
 import { useSelector } from "react-redux";
 
-const PostUser = ({ post }: { post: PostType }) => {
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.auth.isAuthenticated
+const PostUser = ({ post, userId }: { post: PostType, userId: string | undefined }) => {
+  const { userId: currentUserId} = useSelector(
+    (state: RootState) => state.auth
   );
+
+  const isAuthorisedUser = userId === currentUserId;
   const [deletePost, { isLoading: deleting }] = useDeletePostMutation();
   const handleDelete = (postId: string) => {
     deletePost(postId);
@@ -26,7 +28,7 @@ const PostUser = ({ post }: { post: PostType }) => {
         <p className="text-slate-400 flex items-center pb-1">
           <CiUser size={20} />@{post?.user?.username}
         </p>
-       {isAuthenticated && <button
+       {isAuthorisedUser && <button
           className="text-red-500 relative"
           disabled={deleting}
           // onClick={() => handleDelete(post._id)}
