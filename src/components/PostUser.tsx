@@ -1,6 +1,6 @@
 import { BiTrash } from "react-icons/bi";
 import { CiUser } from "react-icons/ci";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { PostType } from "../type";
 import { useDeletePostMutation } from "../features/posts/postsSlice";
 import { FaRegComment, FaHeart } from "react-icons/fa";
@@ -9,7 +9,8 @@ import PostPlaceholder from '../assets/post_images.png';
 import { RootState } from "../app/store";
 import { useSelector } from "react-redux";
 
-const PostUser = ({ post, userId }: { post: PostType, userId: string | undefined }) => {
+const PostUser = ({ post }: { post: PostType }) => {
+  const {userId} = useParams();
   const { userId: currentUserId} = useSelector(
     (state: RootState) => state.auth
   );
