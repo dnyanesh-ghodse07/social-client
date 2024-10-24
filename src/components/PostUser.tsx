@@ -2,16 +2,22 @@ import { BiTrash } from "react-icons/bi";
 import { CiUser } from "react-icons/ci";
 import { Link, useParams } from "react-router-dom";
 import { PostType } from "../type";
-import { useDeletePostMutation } from "../features/posts/postsSlice";
+import {
+  useDeletePostMutation,
+  useSavePostMutation,
+  useUnSavePostMutation,
+} from "../features/posts/postsSlice";
 import { FaRegComment, FaHeart } from "react-icons/fa";
-import { Popover } from "antd";
-import PostPlaceholder from '../assets/post_images.png';
+import { Button, Popover } from "antd";
+import PostPlaceholder from "../assets/post_images.png";
 import { RootState } from "../app/store";
 import { useSelector } from "react-redux";
+import { IoBookmarkOutline } from "react-icons/io5";
+import { IoBookmarkSharp } from "react-icons/io5";
 
 const PostUser = ({ post }: { post: PostType }) => {
-  const {userId} = useParams();
-  const { userId: currentUserId} = useSelector(
+  const { userId } = useParams();
+  const { userId: currentUserId } = useSelector(
     (state: RootState) => state.auth
   );
 
@@ -20,6 +26,16 @@ const PostUser = ({ post }: { post: PostType }) => {
   const handleDelete = (postId: string) => {
     deletePost(postId);
   };
+  const [savePost, { isLoading: savingPost }] = useSavePostMutation();
+  const [unsavePost, { isLoading: unsavingPost }] = useUnSavePostMutation();
+  const handleSavePost = (postId: string) => {
+    savePost(postId);
+  };
+
+  const handleUnSavePost = (postId: string) => {
+    unsavePost(postId);
+  };
+
   return (
     <div
       key={post._id}
@@ -29,46 +45,63 @@ const PostUser = ({ post }: { post: PostType }) => {
         <p className="text-slate-400 flex items-center pb-1">
           <CiUser size={20} />@{post?.user?.username}
         </p>
-       {isAuthorisedUser && <button
-          className="text-red-500 relative"
-          disabled={deleting}
-          // onClick={() => handleDelete(post._id)}
-        >
-          <Popover
-            placement="left"
-            content={
-              <div className="flex justify-between text-sm">
-                <button className="border-b-2 text-xs">Cancel</button>
-                <button
-                  className="border-b-2 text-xs text-rose-400"
-                  onClick={() => handleDelete(post._id)}
-                >
-                  Delete
-                </button>
-              </div>
-            }
-            title="Are you sure to delete this?"
-            trigger="click"
+        {isAuthorisedUser && post?.user?._id === currentUserId && (
+          <Button
+            size="small"
+            type="link"
+            className="text-red-500 relative"
+            disabled={deleting}
           >
-            <BiTrash />
-          </Popover>
-        </button>}
+            <Popover
+              placement="left"
+              content={
+                <div className="flex justify-between text-sm">
+                  <Button type="link" size="small" className="border-b-2 text-xs">Cancel</Button>
+                  <Button type="link"
+                    size="small"
+                    className="border-b-2 text-xs text-rose-400"
+                    onClick={() => handleDelete(post._id)}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              }
+              title="Are you sure to delete this?"
+              trigger="click"
+            >
+              <BiTrash />
+            </Popover>
+          </Button>
+        )}
       </div>
       <Link to={`/myspace/post/${post._id}`}>
-      <div className="w-full h-56">
-       <img className="h-full w-full object-cover" src={post?.postImageUrl || PostPlaceholder} alt={`post${post._id}`} />
-      </div>
+        <div className="w-full h-56 py-2">
+          <img
+            className="h-full w-full object-cover rounded-md"
+            src={post?.postImageUrl || PostPlaceholder}
+            alt={`post${post._id}`}
+          />
+        </div>
         <p className="max-h-24 no-scrollbar overflow-scroll text-slate-600">
-          {post.text.substring(0,150)}...
+          {post.text.substring(0, 150)}...
         </p>
       </Link>
-      <div className="flex gap-2 items-center pt-2">
-        <p className="flex items-center gap-1">
-          <FaHeart /> {post?.likes_count}
-        </p>
-        <button>
-          <FaRegComment />
-        </button>
+      <div className="flex justify-between items-center">
+        <div className="flex gap-2 items-center pt-2">
+          <p className="flex items-center gap-1">
+            <FaHeart size={20} /> {post?.likes_count}
+          </p>
+          <button>
+            <FaRegComment size={20} />
+          </button>
+        </div>
+        <div>
+          {post?.isSaved ? <Button size="small" type="link" disabled={unsavingPost}>
+            <IoBookmarkSharp size={20} onClick={() => handleUnSavePost(post._id)} />
+          </Button> : <Button size="small" type="link" disabled={savingPost}>
+            <IoBookmarkOutline size={20} onClick={() => handleSavePost(post._id)} />
+          </Button>}
+        </div>
       </div>
     </div>
   );

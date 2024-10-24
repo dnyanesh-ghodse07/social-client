@@ -3,7 +3,7 @@ import { logoutUser } from "../features/auth/authAction";
 import { useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../app/store";
 import { NavLink, useNavigate } from "react-router-dom";
-import { Dropdown, MenuProps, Space } from "antd";
+import { Button, Dropdown, MenuProps } from "antd";
 import { IoPersonSharp } from "react-icons/io5";
 import { VscAccount, VscMail, VscSignOut } from "react-icons/vsc";
 import { CgFeed } from "react-icons/cg";
@@ -46,32 +46,44 @@ const Navbar = () => {
         <img width={50} src="/logo_no_bg.png" alt="" />
         <h2 className="text-2xl font-bold text-cyan-700">Social</h2>
       </div>
-      <div className="flex items-center gap-4">
-        <NavLink className="text-cyan-600 flex items-center justify-center gap-1" to="/community">
-          <CgFeed size={24} />
-          <span className="hidden md:block">Community</span>
-        </NavLink>
+      <div className="flex items-center gap-2">
+        <Button type="link" size="small" shape="circle">
+          <NavLink
+            className="text-cyan-600 flex items-center justify-center gap-1"
+            to="/community"
+          >
+            <CgFeed size={24} />
+            <span className="hidden md:block">Community</span>
+          </NavLink>
+        </Button>
         {!isAuthenticated && (
-          <Link to="/login" className="flex items-center justify-center text-cyan-700">
-            <span className="hidden md:block"> Login</span>
-            <BiLogIn size={24} />
-          </Link>
+          <Button type="link" size="small" shape="circle">
+            <Link
+              to="/login"
+              className="flex items-center justify-center text-cyan-700"
+            >
+              <span className="hidden md:block"> Login</span>
+              <BiLogIn size={24} />
+            </Link>
+          </Button>
         )}
         {isAuthenticated && (
-          <NavLink
-            className="text-cyan-600 cursor-pointer"
-            to={`/user/chats/${userId}`}
-          >
-            <VscMail size={30} />
-          </NavLink>
+          <Button type="link" size="small" shape="circle">
+            <NavLink
+              className="text-cyan-600 cursor-pointer"
+              to={`/user/chats/${userId}`}
+            >
+              <VscMail size={24} />
+            </NavLink>
+          </Button>
         )}
         <div>
           {isAuthenticated && (
             <Dropdown menu={{ items }} trigger={["click"]}>
               <a onClick={(e) => e.preventDefault()}>
-                <Space className="border p-2 rounded-full bg-slate-600 text-slate-50 cursor-pointer">
+                <Button size="small" type="primary" shape="circle" className="">
                   <IoPersonSharp />
-                </Space>
+                </Button>
               </a>
             </Dropdown>
           )}

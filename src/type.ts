@@ -39,6 +39,7 @@ export interface PostType {
   postImageUrl?: string;
   userHasLiked?: boolean;
   createdAt?: string,
+  isSaved?: string,
   user: User; // Reference to the User type
 }
 

@@ -6,6 +6,18 @@ export const postsApiSlice = apiSlice.injectEndpoints({
       query: () => "/posts",
       providesTags: ["Post"],
     }),
+    getSavePosts: builder.query({
+      query: (userId) => `/posts/saved/${userId}`,
+      providesTags: ["Post"],
+    }),
+    savePost: builder.mutation({
+      query: (postId) => ({ url: `/posts/save/${postId}`, method: "POST" }),
+      invalidatesTags: ['Post']
+    }),
+    unSavePost: builder.mutation({
+      query: (postId) => ({ url: `/posts/unsave/${postId}`, method: "POST" }),
+      invalidatesTags: ['Post']
+    }),
     getPost: builder.query({
       query: (id) => `/posts/${id}`,
       providesTags: (_result, _error, id) => [{ type: "Post", id }],
@@ -67,4 +79,7 @@ export const {
   useCommentOnPostMutation,
   useGetPostCommentsQuery,
   useDeletePostMutation,
+  useSavePostMutation,
+  useGetSavePostsQuery,
+  useUnSavePostMutation
 } = postsApiSlice;
