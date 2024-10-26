@@ -9,6 +9,7 @@ import { useGetUserQuery } from "../features/user/userSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
 import { Button, Input } from "antd";
+import { IoMdSend } from "react-icons/io";
 
 interface ChatProps {
   currentUserId: string | undefined;
@@ -135,36 +136,37 @@ const Chat = ({ currentUserId, selectedUserId }: ChatProps) => {
             {messages?.map((msg, idx) => (
               <div
                 key={idx}
-                className={`w-1/2 p-1 rounded-md shadow-sm bg-white ${
+                className={`w-1/2 p-1 rounded-md shadow-sm bg-slate-600 ${
                   msg?.sender?._id === currentUserId && "self-end"
                 }`}
               >
-                <div className="flex flex-col p-1">
-                  <span className="self-end text-xs">
-                    {dateFormat(msg?.timestamp, "HH:MM:ss")}
-                  </span>
+                <div className="flex flex-col px-1 pt-1 text-slate-50">
                   <h1>{msg.content}</h1>
+                  <span className="self-end text-[8px] p-0">
+                    {dateFormat(msg?.timestamp, "h:MM TT")}
+                  </span>
                 </div>
               </div>
             ))}
           </div>
         </div>
       )}
-      <div className="sticky bottom-2 flex w-full mt-2 bg-white shadow-md p-2 rounded-lg">
+      <div className="sticky bottom-2 gap-1 flex w-full mt-2 p-2">
         <Input
           type="text"
-          className="p-2 w-full text-[16px]"
+          className="py-2 w-full text-[16px] rounded-full"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Type a message..."
         />
         <Button
           size="large"
-          color="primary"
-          type="primary"
+          type="default"
+          shape="circle"
           onClick={handleSendMessage}
+          className="p-1 flex justify-center items-center"
         >
-          Send
+          <IoMdSend size={24}/>
         </Button>
       </div>
     </div>
