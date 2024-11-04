@@ -23,11 +23,13 @@ const PostUser = ({ post }: { post: PostType }) => {
 
   const isAuthorisedUser = userId === currentUserId;
   const [deletePost, { isLoading: deleting }] = useDeletePostMutation();
+  const [savePost, { isLoading: savingPost }] = useSavePostMutation();
+  const [unsavePost, { isLoading: unsavingPost }] = useUnSavePostMutation();
+
   const handleDelete = (postId: string) => {
     deletePost(postId);
   };
-  const [savePost, { isLoading: savingPost }] = useSavePostMutation();
-  const [unsavePost, { isLoading: unsavingPost }] = useUnSavePostMutation();
+  
   const handleSavePost = (postId: string) => {
     savePost(postId);
   };

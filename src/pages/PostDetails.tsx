@@ -5,7 +5,7 @@ import {
   useGetPostQuery,
 } from "../features/posts/postsSlice";
 import dateFormat from "dateformat";
-import {BiUpArrowAlt } from "react-icons/bi";
+import { BiUpArrowAlt } from "react-icons/bi";
 import { VscArrowLeft } from "react-icons/vsc";
 import { useState } from "react";
 import { Comment } from "../type";
@@ -13,7 +13,7 @@ import Loader from "../components/Loader";
 import Like from "../components/Like";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import CommentBox from "../components/CommentBox";
-import PostPlaceholder from '../assets/post_images.png';
+import PostPlaceholder from "../assets/post_images.png";
 import useNavigateToLogin from "../hooks/useNavigateToLogin";
 import { Link } from "react-router-dom";
 
@@ -23,20 +23,22 @@ const PostDeatails = () => {
   const { postId } = useParams();
   const [commentQuery, setCommentQuery] = useState("");
   const { data: post, isLoading: postLoading, error } = useGetPostQuery(postId);
-  const [addComment] = useCommentOnPostMutation();
-  if (error && "status" in error) {
-    const fetchError = error as FetchBaseQueryError;
-    if (fetchError.status === 401) {
-      localStorage.removeItem('token');
-      // navigate("/login");
-    }
-  }
   const {
     data: comments,
     isLoading,
     isError,
     refetch,
   } = useGetPostCommentsQuery({ postId });
+  
+  const [addComment] = useCommentOnPostMutation();
+
+  if (error && "status" in error) {
+    const fetchError = error as FetchBaseQueryError;
+    if (fetchError.status === 401) {
+      localStorage.removeItem("token");
+      // navigate("/login");
+    }
+  }
 
   const handleAddComment = async () => {
     checkLogin();
@@ -64,13 +66,22 @@ const PostDeatails = () => {
       ) : (
         <div>
           <div className="flex justify-between">
-            <Link to={`/user/profile/${post?.post?.user_id?._id}`} className="text-slate-600">@{post?.post?.user_id?.username}</Link>
+            <Link
+              to={`/user/profile/${post?.post?.user_id?._id}`}
+              className="text-slate-600"
+            >
+              @{post?.post?.user_id?.username}
+            </Link>
             <span className="text-slate-400">
               {dateFormat(post?.post?.createdAt, "fullDate")}
             </span>
           </div>
           <div className="w-full h-96 py-4">
-          <img className="h-full w-full object-contain" src={post?.post?.postImageUrl || PostPlaceholder} alt={`post${postId}`} />
+            <img
+              className="h-full w-full object-contain"
+              src={post?.post?.postImageUrl || PostPlaceholder}
+              alt={`post${postId}`}
+            />
           </div>
           <p className="my-2">{post?.post?.text}</p>
           <div className="flex gap-1">
@@ -106,9 +117,7 @@ const PostDeatails = () => {
         ) : (
           <div className="flex flex-col gap-2 mt-4">
             {comments?.map((comment: Comment) => {
-              return (
-                <CommentBox key={comment._id} comment={comment}/>
-              );
+              return <CommentBox key={comment._id} comment={comment} />;
             })}
           </div>
         )}

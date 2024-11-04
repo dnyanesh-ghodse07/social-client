@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import dateFormat from "dateformat";
 import { Link } from "react-router-dom";
 import NoData from "../components/NoData";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 interface Sender {
   _id: string;
@@ -24,7 +25,15 @@ interface ChatGroup {
 
 const ChatList = () => {
   const { userId } = useParams();
-  const { data: allMessages } = useGetAllChatsQuery({ userId });
+  const { data: allMessages, error } = useGetAllChatsQuery({ userId });
+
+  if (error && "status" in error) {
+    const fetchError = error as FetchBaseQueryError;
+    if (fetchError.status === 401) {
+      localStorage.removeItem('token');
+      // navigate("/login");
+    }
+  }
 
   return (
     <div className="p-4">

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import io from "socket.io-client";
+import socket from "../socket";
+// import io from "socket.io-client";
 import {
   useGetChatMessagesQuery,
   useSendMessageMutation,
@@ -10,6 +11,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
 import { Button, Input } from "antd";
 import { IoMdSend } from "react-icons/io";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 interface ChatProps {
   currentUserId: string | undefined;
@@ -30,11 +32,11 @@ interface Message {
   timestamp: string;
 }
 
-// Initialize the socket once globally
-const socket = io("https://stoked-keyword-436905-f9.el.r.appspot.com/", {
-  withCredentials: true, // Allows credentials (like cookies) if needed
-  transports: ["polling", "websocket"],
-});
+// // Initialize the socket once globally
+// const socket = io("https://stoked-keyword-436905-f9.el.r.appspot.com/", {
+//   withCredentials: true, // Allows credentials (like cookies) if needed
+//   transports: ["polling", "websocket"],
+// });
 
 const Chat = ({ currentUserId, selectedUserId }: ChatProps) => {
   const [newMessage, setNewMessage] = useState("");
@@ -44,10 +46,18 @@ const Chat = ({ currentUserId, selectedUserId }: ChatProps) => {
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
 
   // Fetch chat messages between the current user and the selected user
-  const { data: fetchedMessages, isLoading } = useGetChatMessagesQuery({
+  const { data: fetchedMessages, isLoading, error } = useGetChatMessagesQuery({
     user1Id: currentUserId,
     user2Id: selectedUserId,
   });
+
+  if (error && "status" in error) {
+    const fetchError = error as FetchBaseQueryError;
+    if (fetchError.status === 401) {
+      localStorage.removeItem('token');
+      // navigate("/login");
+    }
+  }
 
   const { data: user } = useGetUserQuery(selectedUserId);
 
@@ -66,8 +76,6 @@ const Chat = ({ currentUserId, selectedUserId }: ChatProps) => {
       setMessages(fetchedMessages.messages);
     }
   }, [fetchedMessages]);
-
-  console.log(fetchedMessages);
 
   // Scroll to bottom whenever messages change
   useEffect(() => {
